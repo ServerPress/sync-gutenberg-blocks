@@ -47,8 +47,20 @@ if (!class_exists('WPSiteSync_Gutenberg_Blocks', FALSE)) {
 #				return;
 #			}
 
+			add_filter('spectrom_sync_allowed_post_types', array($this, 'allow_custom_post_types'));
 			add_action('spectrom_sync_parse_gutenberg_block', array($this, 'parse_gutenberg_block'), 10, 6);
 			add_filter('spectrom_sync_process_gutenberg_block', array($this, 'process_gutenberg_block'), 10, 7);
+		}
+
+		/**
+		 * Adds all custom post types to the list of `spectrom_sync_allowed_post_types`
+		 * @param  array $post_types The post types to allow
+		 * @return array
+		 */
+		public function allow_custom_post_types($post_types)
+		{
+			$post_types[] = 'wp_block';
+			return $post_types;
 		}
 
 		/**
@@ -69,7 +81,7 @@ if (!class_exists('WPSiteSync_Gutenberg_Blocks', FALSE)) {
 			$install = admin_url('plugin-install.php?tab=search&s=wpsitesync');
 			$activate = admin_url('plugins.php');
 			echo '<div class="notice notice-warning">';
-			echo	'<p>', sprintf(__('The <em>WPSiteSync for Gutenberg Blocks</em> plugin requires the main <em>WPSiteSync for Content</em> plugin to be installed and activated. Please %1$sclick here</a> or %2$sclick here</a> to activate.', 'wpsitesync-gutenberg-blocks'),
+			echo	'<p>', sprintf(__('The <em>WPSiteSync for Gutenberg Blocks</em> plugin requires the main <em>WPSiteSync for Content</em> plugin to be installed and activated. Please %1$sclick here</a> to install or %2$sclick here</a> to activate.', 'wpsitesync-gutenberg-blocks'),
 						'<a href="' . $install . '">',
 						'<a href="' . $activate . '">'), '</p>';
 			echo '</div>';

@@ -98,8 +98,10 @@ if (!class_exists('WPSiteSync_Gutenberg_Blocks', FALSE)) {
 		 */
 		public function parse_gutenberg_block($block_name, $json, $source_post_id, $data, $pos, $apirequest)
 		{
-			/*
-			 * Look for Atomic Block types:
+			$ref_ids = array();
+
+			switch ($block_name) {
+			/* Look for Atomic Block types:
 			 *	<!-- wp:atomic-blocks/ab-testimonial {"testimonialImgID":{post_id}} -->
 			 *	<!-- wp:atomic-blocks/ab-profile-box {"profileImgID":{post_id}} -->
 			 *	Notice - no ids in json
@@ -113,51 +115,120 @@ if (!class_exists('WPSiteSync_Gutenberg_Blocks', FALSE)) {
 			 *	<!-- wp:atomic-blocks/ab-container {"profileImgID":{post_id}} --> (property currently not supported)
 			 */
 
-			switch ($block_name) {
 			case 'wp:atomic-blocks/ab-testimonial':
 				$obj = json_decode($json);
 				if (!empty($json) && NULL !== $obj && isset($obj->testimonialImgID)) {
 					// if there's an image ID referenced, handle that attachment
-					$ref_id = abs($obj->testimonialImgID);
-					$thumb = get_post_thumbnail_id($source_post_id);
-					if (FALSE === $apirequest->gutenberg_attachment_block($ref_id, $source_post_id, $thumb, $block_name)) {
-						// TODO: error recovery
-					}
+					$ref_ids[] = abs($obj->testimonialImgID);
 				}
 				break;
 
 			case 'wp:atomic-blocks/ab-profile-box':
 				$obj = json_decode($json);
 				if (!empty($json) && NULL !== $obj && isset($obj->profileImgID)) {
-					$ref_id = abs($obj->profileImgID);
-					$thumb = get_post_thumbnail_id($source_post_id);
-					if (FALSE === $apirequest->gutenberg_attachment_block($ref_id, $source_post_id, $thumb, $block_name)) {
-						// TODO: error recovery
-					}
+					$ref_ids[] = abs($obj->profileImgID);
 				}
 				break;
 
 			case 'wp:atomic-blocks/ab-cta':
 				$obj = json_decode($json);
 				if (!empty($json) && NULL !== $obj && isset($obj->imgID)) {
-					$ref_id = abs($obj->imgID);
-					$thumb = get_post_thumbnail_id($source_post_id);
-					if (FALSE === $apirequest->gutenberg_attachment_block($ref_id, $source_post_id, $thumb, $block_name)) {
-						// TODO: error recovery
-					}
+					$ref_ids[] = abs($obj->imgID);
 				}
 				break;
 
 			case 'wp:atomic-blocks/ab-container':
 				$obj = json_decode($json);
 				if (!empty($json) && NULL !== $obj && isset($obj->profileImgID)) {
-					$ref_id = abs($obj->profileImgID);
-					$thumb = get_post_thumbnail_id($source_post_id);
-					if (FALSE === $apirequest->gutenberg_attachment_block($ref_id, $source_post_id, $thumb, $block_name)) {
-						// TODO: error recovery
+					$ref_ids[] = abs($obj->profileImgID);
+				}
+				break;
+
+			/* Look for Premium Block types:
+			 *	<!-- wp:premium/banner {"imageID":{post_id},"hoverEffect":"gray","minHeight":70,"opacity":19,"id":"{id}"} -->
+			 *	<!-- wp:premium/video-box {"videoBoxId":"premium-video-box-{id}","controls":false,"overlay":true,"overlayImgID":{post_id},"overlayImgURL":"{image_url}"} -->
+			 *	Accordion - no ids in json
+			 *	Button - no ids in json
+			 *	<!-- wp:premium/countup {"align":"left","icon":"img","imageID":{post_id},"imageURL":"{url}","iconSize":93,"selfAlign":"flex-start"} -->
+			 *	<!-- wp:premium/dheading-block {"imageID":{post_id},"imageURL":"{url}"} -->
+			 *	<!-- wp:premium/icon {"imageID":{post_id},"imageURL":"{url}","backgroundSize":"contain"} -->
+			 *	<!-- wp:premium/icon-box {"id":"{id}","iconImage":"image","iconImgId":{post_id},"iconImgUrl":"{url}","iconSize":62,"imageID":{post_id},"imageURL":"http://guten.loc/wp-content/uploads/2018/12/space_8372725172284686336.jpg"} -->
+			 *	<!-- wp:premium/maps {"mapID":"{id}","centerLat":"38.889218","centerLng":"-77.050176","markerIconUrl":"{url}","markerIconId":{post_id},"markerCustom":true,"maxWidth":32,"boxPadding":32} -->
+			 *	Pricing Table - no ids in json
+			 *	Section: <!-- wp:premium/container {"imageID":{post_id},"imageURL":"{url}"} -->
+			 *	<!-- wp:premium/testimonial {"authorImgId":{pist_id},"authorImgUrl":"{url}","authorColor":"#eeeeee","authorComColor":"#eeeeee","quotColor":"#eeeeee","bodyColor":"#eeeeee","dashColor":"#abb8c3","imageID":{post_id},"imageURL":"{url}"} -->
+			 */
+
+			case 'wp:premium/banner':				// references imageID
+			case 'wp:premium/container':			// references imageID
+			case 'wp:premium/countup':				// references imageID and backgroundImageID
+			case 'wp:premium/dheading-block':		// references imageID
+			case 'wp:premium/icon':					// references imageID
+				$obj = json_decode($json);
+				if (!empty($json) && NULL !== $obj) {
+					if (isset($obj->imageID)) {
+						$ref_ids[] = abs($obj->imageID);
+					}
+					if (isset($obj->backgroundImageID)) {
+						$ref_ids[] = abs($obj->backgroundImageID);
 					}
 				}
 				break;
+
+			case 'wp:premium/icon-box':
+				$obj = json_decode($json);
+				if (!empty($json) && NULL !== $obj) {
+					if (isset($obj->iconImgId)) {
+						$ref_ids[] = abs($obj->iconImgId);
+					}
+					if (isset($obj->imageID)) {
+						$ref_ids[] = abs($obj->imageID);
+					}
+				}
+				break;
+
+			case 'wp:premium/maps':
+				$obj = json_decode($json);
+				if (!empty($json) && NULL !== $obj && isset($obj->markerIconId)) {
+					$ref_ids[] = abs($obj->markerIconId);
+				}
+				break;
+
+			case 'wp:premium/testimonial':
+				$obj = json_decode($json);
+				if (!empty($json) && NULL !== $obj) {
+					if (isset($obj->authorImgId)) {
+						$ref_ids[] = abs($obj->authorImgId);
+					}
+					if (isset($obj->imageID)) {
+						$ref_ids[] = abs($obj->imageID);
+					}
+				}
+				break;
+
+			case 'wp:premium/video-box':
+				$obj = json_decode($json);
+				if (!empty($json) && NULL !== $obj && isset($obj->overlayImgID)) {
+					$ref_ids[] = abs($obj->overlayImgID);
+				}
+				break;
+			}
+
+			// any images referenced are now in the $ref_ids array. check this and handle image references
+
+			if (NULL !== $ref_ids) {
+				if (!is_array($ref_ids))
+					$ref_ids = array($ref_ids);			// convert to array
+
+				// get the post thumbnail id- this is passed to send_media()
+				$thumb = get_post_thumbnail_id($source_post_id);
+				foreach ($ref_ids as $ref_id) {
+					if (0 !== $ref_id) {
+						if (FALSE === $apirequest->gutenberg_attachment_block($ref_id, $source_post_id, $thumb, $block_name)) {
+							// TODO: error recovery
+						}
+					}
+				}
 			}
 		}
 

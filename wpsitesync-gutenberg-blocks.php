@@ -246,21 +246,20 @@ if (!class_exists('WPSiteSync_Gutenberg_Blocks', FALSE)) {
 		public function process_gutenberg_block($content, $block_name, $json, $target_post_id, $start, $end, $pos)
 		{
 SyncDebug::log(__METHOD__.'():' . __LINE__);
-			/*
-			 * Look for block types:
+			switch ($block_name) {
+			/* Look for Atomic Block types:
 			 *	<!-- wp:atomic-blocks/ab-testimonial {"testimonialImgID":{post_id}} -->
 			 *	<!-- wp:atomic-blocks/ab-profile-box {"profileImgID":{post_id}} -->
 			 *	<!-- wp:atomic-blocks/ab-cta {"buttonText":"click here","imgID":{post_id}} -->
 			 *	<!-- wp:atomic-blocks/ab-container {"profileImgID":{post_id}} --> (property currently not supported)
 			 */
-			switch ($block_name) {
 			case 'wp:atomic-blocks/ab-testimonial':
 				$obj = json_decode($json);
 				if (!empty($json) && NULL !== $obj && isset($obj->testimonialImgID)) {
 					$source_ref_id = abs($obj->testimonialImgID);
 					if (0 !== $source_ref_id) {
 						$apicontroller = SyncApiController::get_instance();
-						$sync_mode = new SyncModel();
+						$sync_model = new SyncModel();
 						$sync_data = $sync_model->get_sync_data($source_ref_id, $apicontroller->source_site_key);
 						if (NULL !== $sync_data) {
 							$target_ref_id = abs($sync_data->target_content_id);
@@ -280,7 +279,7 @@ SyncDebug::log(__METHOD__.'():' . __LINE__);
 					$source_ref_id = abs($obj->profileImgID);
 					if (0 !== $source_ref_id) {
 						$apicontroller = SyncApiController::get_instance();
-						$sync_mode = new SyncModel();
+						$sync_model = new SyncModel();
 						$sync_data = $sync_model->get_sync_data($source_ref_id, $apicontroller->source_site_key);
 						if (NULL !== $sync_data) {
 							$target_ref_id = abs($sync_data->target_content_id);
@@ -311,6 +310,158 @@ SyncDebug::log(__METHOD__.'():' . __LINE__ . ' data=' . var_export($sync_data, T
 SyncDebug::log(__METHOD__.'():' . __LINE__ . ' new json=' . $new_obj_data);
 							$content = substr($content, 0, $start) . $new_obj_data . substr($content, $end + 1);
 							// no classes or other id references within the HTML
+						}
+					}
+				}
+				break;
+
+			/* Look for Premium Block types:
+			 *	<!-- wp:premium/banner {"imageID":{post_id},"hoverEffect":"gray","minHeight":70,"opacity":19,"id":"{id}"} -->
+			 *	<!-- wp:premium/video-box {"videoBoxId":"premium-video-box-{id}","controls":false,"overlay":true,"overlayImgID":{post_id},"overlayImgURL":"{image_url}"} -->
+			 *	<!-- wp:premium/countup {"align":"left","icon":"img","imageID":{post_id},"imageURL":"{url}","iconSize":93,"selfAlign":"flex-start"} -->
+			 *	<!-- wp:premium/dheading-block {"imageID":{post_id},"imageURL":"{url}"} -->
+			 *	<!-- wp:premium/icon {"imageID":{post_id},"imageURL":"{url}","backgroundSize":"contain"} -->
+			 *	<!-- wp:premium/icon-box {"id":"{id}","iconImage":"image","iconImgId":{post_id},"iconImgUrl":"{url}","iconSize":62,"imageID":{post_id},"imageURL":"http://guten.loc/wp-content/uploads/2018/12/space_8372725172284686336.jpg"} -->
+			 *	<!-- wp:premium/maps {"mapID":"{id}","centerLat":"38.889218","centerLng":"-77.050176","markerIconUrl":"{url}","markerIconId":{post_id},"markerCustom":true,"maxWidth":32,"boxPadding":32} -->
+			 *	Section: <!-- wp:premium/container {"imageID":{post_id},"imageURL":"{url}"} -->
+			 *	<!-- wp:premium/testimonial {"authorImgId":{pist_id},"authorImgUrl":"{url}","authorColor":"#eeeeee","authorComColor":"#eeeeee","quotColor":"#eeeeee","bodyColor":"#eeeeee","dashColor":"#abb8c3","imageID":{post_id},"imageURL":"{url}"} -->
+			 */
+
+			case 'wp:premium/banner':
+			case 'wp:premium/container':
+			case 'wp:premium/dheading-block':
+			case 'wp:premium/icon':
+				$obj = json_decode($json);
+				if (!empty($json) && NULL !== $obj) {
+					if (isset($obj->imageID)) {
+						$source_ref_id = abs($obj->imageID);
+						if (0 !== $source_ref_id) {
+							$apicontroller = SyncApiController::get_instance();
+							$sync_model = new SyncModel();
+							$sync_data = $sync_model->get_sync_data($source_ref_id, $apicontroller->source_site_key);
+							if (NULL !== $sync_data) {
+								$target_ref_id = abs($sync_data->target_content_id);
+								$obj->imageID = $target_ref_id;
+								$new_obj_data = json_encode($obj);
+								$content = substr($content, 0, $start) . $new_obj_data . substr($content, $end + 1);
+							}
+						}
+					}
+				}
+				break;
+
+			case 'wp:premium/countup':
+				$obj = json_decode($json);
+				if (!empty($json) && NULL !== $obj) {
+					$updated = FALSE;
+					if (isset($obj->imageID)) {
+						$source_ref_id = abs($obj->imageID);
+						if (0 !== $source_ref_id) {
+							$apicontroller = SyncApiController::get_instance();
+							$sync_model = new SyncModel();
+							$sync_data = $sync_model->get_sync_data($source_ref_id, $apicontroller->source_site_key);
+							if (NULL !== $sync_data) {
+								$target_ref_id = abs($sync_data->target_content_id);
+								$obj->imageID = $target_ref_id;
+								$updated = TRUE;
+							}
+						}
+					}
+					if (isset($obj->backgroundImageID)) {
+						$source_ref_id = abs($obj->backgroundImageID);
+						if (0 !== $source_ref_id) {
+							$apicontroller = SyncApiController::get_instance();
+							$sync_model = new SyncModel();
+							$sync_data = $sync_model->get_sync_data($source_ref_id, $apicontroller->source_site_key);
+							if (NULL !== $sync_data) {
+								$target_ref_id = abs($sync_data->target_content_id);
+								$obj->backgroundImageID = $target_ref_id;
+								$updated = TRUE;
+							}
+						}
+					}
+					if ($updated) {
+						$new_obj_data = json_encode($obj);
+						$content = substr($content, 0, $start) . $new_obj_data . substr($content, $end + 1);
+					}
+				}
+				break;
+
+			case 'wp:premium/icon-box':
+				$obj = json_decode($json);
+				if (!empty($json) && NULL !== $obj) {
+					if (isset($obj->iconImgId)) {
+						$source_ref_id = abs($obj->iconImgId);
+						if (0 !== $source_ref_id) {
+							$apicontroller = SyncApiController::get_instance();
+							$sync_model = new SyncModel();
+							$sync_data = $sync_model->get_sync_data($source_ref_id, $apicontroller->source_site_key);
+							if (NULL !== $sync_data) {
+								$target_ref_id = abs($sync_data->target_content_id);
+								$obj->iconImgId = $target_ref_id;
+								$new_obj_data = json_encode($obj);
+								$content = substr($content, 0, $start) . $new_obj_data . substr($content, $end + 1);
+							}
+						}
+					}
+				}
+				break;
+
+			case 'wp:premium/maps':
+				$obj = json_decode($json);
+				if (!empty($json) && NULL !== $obj) {
+					if (isset($obj->markerIconId)) {
+						$source_ref_id = abs($obj->markerIconId);
+						if (0 !== $source_ref_id) {
+							$apicontroller = SyncApiController::get_instance();
+							$sync_model = new SyncModel();
+							$sync_data = $sync_model->get_sync_data($source_ref_id, $apicontroller->source_site_key);
+							if (NULL !== $sync_data) {
+								$target_ref_id = abs($sync_data->target_content_id);
+								$obj->markerIconId = $target_ref_id;
+								$new_obj_data = json_encode($obj);
+								$content = substr($content, 0, $start) . $new_obj_data . substr($content, $end + 1);
+							}
+						}
+					}
+				}
+				break;
+
+			case 'wp:premium/testimonial':
+				$obj = json_decode($json);
+				if (!empty($json) && NULL !== $obj) {
+					if (isset($obj->authorImgId)) {
+						$source_ref_id = abs($obj->authorImgId);
+						if (0 !== $source_ref_id) {
+							$apicontroller = SyncApiController::get_instance();
+							$sync_model = new SyncModel();
+							$sync_data = $sync_model->get_sync_data($source_ref_id, $apicontroller->source_site_key);
+							if (NULL !== $sync_data) {
+								$target_ref_id = abs($sync_data->target_content_id);
+								$obj->authorImgId = $target_ref_id;
+								$new_obj_data = json_encode($obj);
+								$content = substr($content, 0, $start) . $new_obj_data . substr($content, $end + 1);
+							}
+						}
+					}
+				}
+				break;
+
+			case 'wp:premium/video-box':
+				$obj = json_decode($json);
+				if (!empty($json) && NULL !== $obj) {
+					if (isset($obj->overlayImgID)) {
+						$source_ref_id = abs($obj->overlayImgID);
+						if (0 !== $source_ref_id) {
+							$apicontroller = SyncApiController::get_instance();
+							$sync_model = new SyncModel();
+							$sync_data = $sync_model->get_sync_data($source_ref_id, $apicontroller->source_site_key);
+							if (NULL !== $sync_data) {
+								$target_ref_id = abs($sync_data->target_content_id);
+								$obj->overlayImgID = $target_ref_id;
+								$new_obj_data = json_encode($obj);
+								$content = substr($content, 0, $start) . $new_obj_data . substr($content, $end + 1);
+							}
 						}
 					}
 				}

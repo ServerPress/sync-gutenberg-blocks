@@ -2,7 +2,7 @@
 /*
 Plugin Name: WPSiteSync for Gutenberg Blocks
 Plugin URI: https://wpsitesync.com
-Description: Adds handlers for third-party Gutenberg Blocks to WPSiteSync so your favorite blocks can be synchronized.
+Description: Adds handlers for third-party Gutenberg Blocks to WPSiteSync so all your favorite blocks can be synchronized.
 Author: WPSiteSync
 Author URI: http://wpsitesync.com
 Version: 1.0
@@ -24,6 +24,86 @@ if (!class_exists('WPSiteSync_Gutenberg_Blocks', FALSE)) {
 		const PLUGIN_KEY = '8d2f305fbb56ac7d5e4c79924fd4a8ab';
 
 		private static $_instance = NULL;
+
+		// array of block names and the properties they reference
+		// property is in the form: '[name.name:type'
+		//		a '[' at the begining indicates that the property is an array of items
+		//		':type' is the type of propert:
+		//			nothing indicates a reference to an image id
+		//			:u indicates a reference to a user id
+		//			:p indicates a reference to a post id
+		//			:l indicates a reference to a link. the link can include a post id: /wp-admin/post.php?post={post_id}\u0026action=edit
+		private $_props = array(
+			// block name =>							property list
+
+			// properties for: Atomic Blocks v1.4.23
+		//	wp:atomic-blocks/ab-accordion - no ids in json
+		//	wp:atomic-blocks/ab-button - no ids in json
+			'wp:atomic-blocks/ab-container' =>			'profileImgID',
+			'wp:atomic-blocks/ab-cta' =>				'imgID',
+		//	wp:atomic-blocks/ab-drop-cap - no ids in json
+		//	wp:atomic-blocks/ab-notice - no ids in json
+		//	wp:atomic-blocks/ab-post-grid - no ids in json
+			'wp:atomic-blocks/ab-profile-box' =>		'profileImgID',
+		//	wp:atomic-blocks/ab-sharing - no ids in json
+		//	wp:atomic-blocks/ab-spacer - no ids in json
+			'wp:atomic-blocks/ab-testimonial' =>		'testimonialImgID',
+
+			// properties for: Premium Blocks for Gutenberg v1.6.2
+		//	wp:premium/accordion - no ids in json
+			'wp:premium/banner' =>						'imageID',
+		//	wp:premium/button - no ids in json
+			'wp:premium/container' =>					'imageID',
+			'wp:premium/countup' =>						'imageID|backgroundImageID',
+			'wp:premium/dheading-block' =>				'imageID',
+			'wp:premium/icon' =>						'imageID',
+			'wp:premium/icon-box' =>					'imageID|iconImgId',
+			'wp:premium/maps' =>						'markerIconId',
+		//	wp:premium/pricing-table - no ids in json
+			'wp:premium/testimonial' =>					'imageID|authorImgId',
+			'wp:premium/video-box' =>					'overlayImgID',
+
+			// properties for: Ultimate Addons for Gutenberg v1.13.1
+		//	wp:uagb/advanced-heading - no ids in json
+			'wp:uagb/blockquote' =>						'authorImage.id|author.author:u', #18
+		//	wp:uagb/buttons Multi Buttons - no ids in json
+		//	wp:uagb/call-to-action - no ids in json
+			'wp:uagb/cf7-styler' =>						'', #19
+		//	wp:uagb/content-timeline - no ids in json
+		//	wp:uagb/marketing-button - no ids in json
+			'wp:uagb/columns' =>						'[image.id|[image.author:u|[image.editLink:l', #20
+			'wp:uagb/icon-list' =>						'[icons.image.id|[icons.image.author:u|[icons.image.editLink:l', #21
+			'wp:uagb/gf-styler' =>						'', #22
+		//	wp:uagb/google-map - no ids in json
+			'wp:uagb/info-box' =>						'iconImage.id|iconImage.uploadedTo:p|iconImage.author:u|iconImage.editLink:l|iconImage.uploadedToLink:l', #23
+		//	wp:uagb/post-carousel - no ids in json
+		//	wp:uagb/post-grid - no ids in json
+		//	wp:uagb/post-masonry - no ids in json
+		//	wp:uagb/post-timeline - no ids in json
+			'wp:uagb/restaurant-menu' =>				'[rest_menu_item_arr.image.id|[rest_menu_item_arr.image.author:u|[rest_menu_item_arr.image.uploadedTo:p|[rest_menu_item_arr.image.editLink:l|[rest_menu_item_arr.image.uploadedToLink:l', #24
+			'wp:uagb/section' =>						'backgroundImage.id|backgroundImage.author:u|backgroundImage.editLink:l|backgroundImage.uploadedToLink:l', #25
+			'wp:uagb/social-share' =>					'[socials.image.id|[socials.image.author:u|[socials.image.editLink:l|[socials.image.uploadedToLink:l', #26
+		//	wp:uagb/table-of-contents - no ids in json
+			'wp:uagb/team' =>							'image.id|image.author:u|image.editLink:l|image.uploadedToLink:l', #27
+			'wp:uagb/testimonial' =>					'[test_block.image.id|[test_block.image.author:u|[test_block.image.uploadedTo:p|[test_block.image.editLink:l|[test_block.image.uploadedToLink:l', #28
+		);
+
+		const PROPTYPE_IMAGE = 1;					// :i
+		const PROPTYPE_POST = 2;					// :p
+		const PROPTYPE_USER = 3;					// :u
+		const PROPTYPE_LINK = 4;					// :l
+		const PROPTYPE_GF = 5;						// :gf gravity form
+		const PROPTYPE_CF = 6;						// :cf contact form 7
+
+		private $_prop_type = 0;					// property type- one of the PROPTYPE_ constants
+		private $_prop_name = NULL;					// name of the property to update
+		private $_prop_array = FALSE;				// set to TRUE if property refers to an array
+		private $_prop_list = NULL;					// list of property elements
+
+		private $_block_names = NULL;				// array of block names (keys) from $_props
+		private $_thumb_id = NULL;					// post ID of thumbnail for current post
+		private $_api_controller = NULL;			// copy of API Controller instance used on Target
+		private $_sync_model = NULL;				// instance of SyncModel used for image lookup
 
 		private function __construct()
 		{
@@ -50,6 +130,28 @@ if (!class_exists('WPSiteSync_Gutenberg_Blocks', FALSE)) {
 			add_filter('spectrom_sync_allowed_post_types', array($this, 'allow_custom_post_types'));
 			add_action('spectrom_sync_parse_gutenberg_block', array($this, 'parse_gutenberg_block'), 10, 6);
 			add_filter('spectrom_sync_process_gutenberg_block', array($this, 'process_gutenberg_block'), 10, 7);
+			add_filter('spectrom_sync_notice_code_to_text', array($this, 'filter_notice_codes'), 10, 2);
+
+			$this->_block_names = array_keys($this->_props);
+		}
+
+		/**
+		 * Loads a specified class file name and optionally creates an instance of it
+		 * @param string $name Name of class to load
+		 * @param boolean $create TRUE to create an instance of the loaded class
+		 * @return boolean|object Created instance if $create is TRUE; otherwise FALSE
+		 */
+		public function load_class($name, $create = FALSE)
+		{
+			$file = __DIR__ . '/classes/' . strtolower($name) . '.php';
+SyncDebug::log(__METHOD__.'():' . __LINE__ . ' loading class "' . $file . '"');
+			if (file_exists($file))
+				require_once($file);
+			if ($create) {
+				$instance = 'Sync' . $name;
+				return new $instance();
+			}
+			return FALSE;
 		}
 
 		/**
@@ -88,6 +190,141 @@ if (!class_exists('WPSiteSync_Gutenberg_Blocks', FALSE)) {
 		}
 
 		/**
+		 * Parses the property, setting the type, name and list from the name
+		 * @param string $prop The property name to be parsed
+		 */
+		private function _parse_property($prop)
+		{
+			$this->_prop_type = self::PROPTYPE_IMAGE;
+			$this->_prop_array = FALSE;
+
+			// check for the suffix and set the _prop_type from that
+			if (FALSE !== ($pos = strpos($prop, ':'))) {
+				switch (substr($prop, $pos)) {
+				case ':i':			$this->_prop_type = self::PROPTYPE_IMAGE;		break;
+				case ':l':			$this->_prop_type = self::PROPTYPE_LINK;		break;
+				case ':p':			$this->_prop_type = self::PROPTYPE_POST;		break;
+				case ':u':			$this->_prop_type = self::PROPTYPE_USER;		break;
+				case ':cf':			$this->_prop_type = self::PROPTYPE_CF;			break;
+				case ':gf':			$this->_prop_type = self::PROPTYPE_GF;			break;
+				}
+				$prop = substr($prop, 0, $pos);			// remove the suffix
+			}
+
+			// check for array references
+			if ('[' === substr($prop, 0, 1)) {
+				$this->_prop_array = TRUE;
+				$prop = substr($prop, 1);
+			}
+
+			if (FALSE !== strpos($prop, '.')) {
+				// this section handles Ultimate Addons for Gutenberg's nested properties
+				// right now, it only handles one level of property nesting
+				$this->_prop_name = NULL;
+				$this->_prop_list = explode('.', $prop);
+if (count($this->_prop_list) > 3)
+SyncDebug::log(__METHOD__.'():' . __LINE__ . ' ERROR: more than three properties: ' . implode('->', $this->_prop_list));
+			} else {
+				$this->_prop_name = $prop;
+				$this->_prop_list = NULL;
+			}
+SyncDebug::log(__METHOD__.'():' . __LINE__ . ' type=' . $this->_prop_type . ' arr=' . ($this->_prop_array ? 'T' : 'F') .
+				' name=' . (NULL === $this->_prop_name ? '(NULL)' : $this->_prop_name) .
+				' list=' . (NULL === $this->_prop_list ? '(NULL)' : implode('->', $this->_prop_list)));
+		}
+
+		/**
+		 * Obtains a property's value
+		 * @param stdClass $obj JSON object reference
+		 * @param int $ndx Index into array, if current property references an array
+		 * @return multi the value from the object referenced by the current property
+		 */
+		private function _get_val($obj, $ndx = 0)
+		{
+			$val = 0;
+			$idx = 0;						// this is the index within the _prop_list array to use for property references
+			$prop_name = '';
+if ($this->_prop_array) {
+	$idx = 1;
+	$prop_name = $this->_prop_list[0] . '[' . $ndx . ']->';
+}
+			$idx2 = $idx + 1;
+
+			if (NULL === $this->_prop_name) {									// nested reference
+$prop_name .= $this->_prop_list[$idx] . '->' . $this->_prop_list[$idx2];
+SyncDebug::log(__METHOD__.'():' . __LINE__ . ' getting property: ' . $prop_name);
+				if (isset($obj->{$this->_prop_list[$idx]}->{$this->_prop_list[$idx2]}))
+					$val = $obj->{$this->_prop_list[$idx]}->{$this->_prop_list[$idx2]};
+			} else {															// single reference
+$prop_name .= $this->_prop_name;
+SyncDebug::log(__METHOD__.'():' . __LINE__ . ' getting property: ' . $prop_name);
+				// property denotes a single reference
+				if (isset($obj->{$this->_prop_name}))
+					$val = $obj->{$this->_prop_name};
+			}
+			return $val;
+		}
+
+		/**
+		 * Sets a property's value
+		 * @param stdClass $obj JSON object reference
+		 * @param multi $val The value to set for the current property
+		 * @param int $ndx Index into array, if current property references an array
+		 */
+		private function _set_val($obj, $val, $ndx = 0)
+		{
+			$idx = 0;
+			$prop_name = '';
+if ($this->_prop_array) {
+	$idx = 1;
+	$prop_name = $this->_prop_list[0] . '[' . $ndx . ']->';
+}
+			$idx2 = $idx + 1;
+
+			if (NULL === $this->_prop_name) {									// nexted reference
+$prop_name .= $this->_prop_list[$idx] . '->' . $this->_prop_list[$idx2];
+SyncDebug::log(__METHOD__.'():' . __LINE__ . ' setting property: ' . $prop_name);
+				if (isset($obj->{$this->_prop_list[$idx]}->{$this->_prop_list[$idx2]}))
+					$obj->{$this->_prop_list[$idx]}->{$this->_prop_list[$idx2]} = $val;
+				else
+					throw new Exception('Property "' . $prop_name . '" does not exist in object');
+			} else {															// single reference
+$prop_name .= $this->_prop_name;
+SyncDebug::log(__METHOD__.'():' . __LINE__ . ' setting property: ' . $prop_name);
+				if (isset($obj->{$this->_prop_name}))
+					$obj->{$this->_prop_name} = $val;
+				else
+					throw new Exception('Property "' . $prop_name . '" does not exist in object');
+			}
+		}
+
+		/**
+		 * Gets a Target ID value from a given Source ID value, based on current property type
+		 * @param int $source_ref_id The Source ID value
+		 * @return boolean|int FALSE on failure; otherwise integer value ofr Target property
+		 */
+		private function _get_target_ref($source_ref_id)
+		{
+			switch ($this->_prop_type) {
+			case self::PROPTYPE_IMAGE:
+				$source_ref_id = abs($source_ref_id);		// these are always an integer
+				$sync_data = $this->_sync_model->get_sync_data($source_ref_id, $this->_api_controller->source_site_key);
+				if (NULL === $sync_data)
+					return FALSE;			// no data found, indicate this to caller
+				return abs($sync_data->target_content_id);
+				break;
+			case self::PROPTYPE_LINK:
+				return FALSE;
+				// note: this will return the string with the post ID modified
+				break;
+			case self::PROPTYPE_USER:
+				return FALSE;
+				// note: this will return the user id
+			}
+			return FALSE;
+		}
+
+		/**
 		 * Handle notifications of Gutenberg Block names during content parsing on the Source site
 		 * @param string $block_name A String containing the Block Name, such as 'wp:cover'
 		 * @param string $json A string containing the JSON data found in the Gutenberg Block Marker
@@ -98,138 +335,88 @@ if (!class_exists('WPSiteSync_Gutenberg_Blocks', FALSE)) {
 		 */
 		public function parse_gutenberg_block($block_name, $json, $source_post_id, $data, $pos, $apirequest)
 		{
-			$ref_ids = array();
+SyncDebug::log(__METHOD__.'():' . __LINE__ . ' block name=' . $block_name);
+			if (in_array($block_name, $this->_block_names)) {
+				// check block name for types that cannot be synchronized and provide a notice
+				switch ($block_name) {
+				case 'wp:uagb/cf7-styler':
+					WPSiteSync_Gutenberg_Blocks::get_instance()->load_class('gutenbergblocksapirequest', FALSE);
+					$resp = $apirequest->get_response();
+					$resp->notice_code(SyncGutenbergBlocksApiRequest::NOTICE_GB_CONTACTFORM7);
+					break;
 
-			switch ($block_name) {
-			/* Look for Atomic Block types:
-			 *	<!-- wp:atomic-blocks/ab-testimonial {"testimonialImgID":{post_id}} -->
-			 *	<!-- wp:atomic-blocks/ab-profile-box {"profileImgID":{post_id}} -->
-			 *	Notice - no ids in json
-			 *	Drop Cap - no ids in json
-			 *	Button - no ids in json
-			 *	Spacer - no ids in json
-			 *	Accordion - no ids in json
-			 *	<!-- wp:atomic-blocks/ab-cta {"buttonText":"click here","imgID":{post_id}} -->
-			 *	Sharing - no ids in json
-			 *	Post Grid - no ids in json
-			 *	<!-- wp:atomic-blocks/ab-container {"profileImgID":{post_id}} --> (property currently not supported)
-			 */
-
-			case 'wp:atomic-blocks/ab-testimonial':
-				$obj = json_decode($json);
-				if (!empty($json) && NULL !== $obj && isset($obj->testimonialImgID)) {
-					// if there's an image ID referenced, handle that attachment
-					$ref_ids[] = abs($obj->testimonialImgID);
+				case 'wp:uagb/gf-styler':
+					WPSiteSync_Gutenberg_Blocks::get_instance()->load_class('gutenbergblocksapirequest', FALSE);
+					$resp = $apirequest->get_response();
+					$resp->notice_code(SyncGutenbergBlocksApiRequest::NOTICE_GB_GRAVITYFORM);
+					break;
 				}
-				break;
 
-			case 'wp:atomic-blocks/ab-profile-box':
+				// the block name is found within our list of known block types to update
 				$obj = json_decode($json);
-				if (!empty($json) && NULL !== $obj && isset($obj->profileImgID)) {
-					$ref_ids[] = abs($obj->profileImgID);
-				}
-				break;
+if ('wp:uagb/info-box' === $block_name) SyncDebug::log(__METHOD__.'():' . __LINE__ . ' found json block data for "' . $block_name . '" : ' . var_export($obj, TRUE));
 
-			case 'wp:atomic-blocks/ab-cta':
-				$obj = json_decode($json);
-				if (!empty($json) && NULL !== $obj && isset($obj->imgID)) {
-					$ref_ids[] = abs($obj->imgID);
-				}
-				break;
-
-			case 'wp:atomic-blocks/ab-container':
-				$obj = json_decode($json);
-				if (!empty($json) && NULL !== $obj && isset($obj->profileImgID)) {
-					$ref_ids[] = abs($obj->profileImgID);
-				}
-				break;
-
-			/* Look for Premium Block types:
-			 *	<!-- wp:premium/banner {"imageID":{post_id},"hoverEffect":"gray","minHeight":70,"opacity":19,"id":"{id}"} -->
-			 *	<!-- wp:premium/video-box {"videoBoxId":"premium-video-box-{id}","controls":false,"overlay":true,"overlayImgID":{post_id},"overlayImgURL":"{image_url}"} -->
-			 *	Accordion - no ids in json
-			 *	Button - no ids in json
-			 *	<!-- wp:premium/countup {"align":"left","icon":"img","imageID":{post_id},"imageURL":"{url}","iconSize":93,"selfAlign":"flex-start"} -->
-			 *	<!-- wp:premium/dheading-block {"imageID":{post_id},"imageURL":"{url}"} -->
-			 *	<!-- wp:premium/icon {"imageID":{post_id},"imageURL":"{url}","backgroundSize":"contain"} -->
-			 *	<!-- wp:premium/icon-box {"id":"{id}","iconImage":"image","iconImgId":{post_id},"iconImgUrl":"{url}","iconSize":62,"imageID":{post_id},"imageURL":"http://guten.loc/wp-content/uploads/2018/12/space_8372725172284686336.jpg"} -->
-			 *	<!-- wp:premium/maps {"mapID":"{id}","centerLat":"38.889218","centerLng":"-77.050176","markerIconUrl":"{url}","markerIconId":{post_id},"markerCustom":true,"maxWidth":32,"boxPadding":32} -->
-			 *	Pricing Table - no ids in json
-			 *	Section: <!-- wp:premium/container {"imageID":{post_id},"imageURL":"{url}"} -->
-			 *	<!-- wp:premium/testimonial {"authorImgId":{pist_id},"authorImgUrl":"{url}","authorColor":"#eeeeee","authorComColor":"#eeeeee","quotColor":"#eeeeee","bodyColor":"#eeeeee","dashColor":"#abb8c3","imageID":{post_id},"imageURL":"{url}"} -->
-			 */
-
-			case 'wp:premium/banner':				// references imageID
-			case 'wp:premium/container':			// references imageID
-			case 'wp:premium/countup':				// references imageID and backgroundImageID
-			case 'wp:premium/dheading-block':		// references imageID
-			case 'wp:premium/icon':					// references imageID
-				$obj = json_decode($json);
 				if (!empty($json) && NULL !== $obj) {
-					if (isset($obj->imageID)) {
-						$ref_ids[] = abs($obj->imageID);
-					}
-					if (isset($obj->backgroundImageID)) {
-						$ref_ids[] = abs($obj->backgroundImageID);
-					}
-				}
-				break;
+					// this block has a JSON object embedded within it
+					$props = explode('|', $this->_props[$block_name]);
+SyncDebug::log(__METHOD__.'():' . __LINE__ . ' props=' . var_export($props, TRUE));
+					foreach ($props as $property) {
+						// for each property listed in the $_props array, look to see if it refers to an image ID
+						$ref_ids = array();
+						$this->_parse_property($property);
+						$prop_name = $this->_prop_name;
 
-			case 'wp:premium/icon-box':
-				$obj = json_decode($json);
-				if (!empty($json) && NULL !== $obj) {
-					if (isset($obj->iconImgId)) {
-						$ref_ids[] = abs($obj->iconImgId);
-					}
-					if (isset($obj->imageID)) {
-						$ref_ids[] = abs($obj->imageID);
-					}
-				}
-				break;
-
-			case 'wp:premium/maps':
-				$obj = json_decode($json);
-				if (!empty($json) && NULL !== $obj && isset($obj->markerIconId)) {
-					$ref_ids[] = abs($obj->markerIconId);
-				}
-				break;
-
-			case 'wp:premium/testimonial':
-				$obj = json_decode($json);
-				if (!empty($json) && NULL !== $obj) {
-					if (isset($obj->authorImgId)) {
-						$ref_ids[] = abs($obj->authorImgId);
-					}
-					if (isset($obj->imageID)) {
-						$ref_ids[] = abs($obj->imageID);
-					}
-				}
-				break;
-
-			case 'wp:premium/video-box':
-				$obj = json_decode($json);
-				if (!empty($json) && NULL !== $obj && isset($obj->overlayImgID)) {
-					$ref_ids[] = abs($obj->overlayImgID);
-				}
-				break;
-			}
-
-			// any images referenced are now in the $ref_ids array. check this and handle image references
-
-			if (NULL !== $ref_ids) {
-				if (!is_array($ref_ids))
-					$ref_ids = array($ref_ids);			// convert to array
-
-				// get the post thumbnail id- this is passed to send_media()
-				$thumb = get_post_thumbnail_id($source_post_id);
-				foreach ($ref_ids as $ref_id) {
-					if (0 !== $ref_id) {
-						if (FALSE === $apirequest->gutenberg_attachment_block($ref_id, $source_post_id, $thumb, $block_name)) {
-							// TODO: error recovery
+						if ($this->_prop_array) {								// property denotes an array reference
+							if (isset($obj->{$this->_prop_list[0]})) {			// make sure property exists
+SyncDebug::log(__METHOD__.'():' . __LINE__ . ' checking array: "' . $this->_prop_list[0] . '"');
+								$idx = 0;
+								foreach ($obj->{$this->_prop_list[0]} as $entry) {
+									$ref_id = abs($this->_get_val($entry, $idx));
+SyncDebug::log(__METHOD__.'():' . __LINE__ . ' source ref=' . var_export($source_ref_id, TRUE));
+									if (0 !== $ref_id)
+										$ref_ids[] = $ref_id;
+									++$idx;
+								}
+							}
+						} else {												// not an array reference, look up single property
+							$ref_id = abs($this->_get_val($obj));
+SyncDebug::log(__METHOD__.'():' . __LINE__ . ' source ref=' . var_export($ref_id, TRUE));
+							if (0 !== $ref_id)
+								$ref_ids[] = $ref_id;
 						}
-					}
-				}
-			}
+SyncDebug::log(__METHOD__.'():' . __LINE__ . ' found property "' . $prop_name . '" referencing ids ' . implode(',', $ref_ids));
+
+						switch ($this->_prop_type) {
+						case self::PROPTYPE_IMAGE:
+							// get the thumbnail id if we haven't already
+							if (NULL === $this->_thumb_id)			// if the thumb id hasn't already been determined, get it here
+								$this->_thumb_id = abs(get_post_thumbnail_id($source_post_id));
+
+							// now go through the list. it's a list since Ultimate Addons uses arrays for some of it's block data
+							foreach ($ref_ids as $ref_id) {
+								if (0 !== $ref_id) {
+									// the property has a non-zero value, it's an image reference
+									if (FALSE === $apirequest->gutenberg_attachment_block($ref_id, $source_post_id, $this->_thumb_id, $block_name)) {
+										// TODO: error recovery
+									}
+								} // 0 !== $ref_id
+							}
+							break;
+						case self::PROPTYPE_LINK:
+							break;
+						case self::PROPTYPE_POST:
+							break;
+						case self::PROPTYPE_USER:
+							break;
+						}
+
+					} // foreach
+				} // !empty($json)
+			} // in_array($block_name, $this->_props)
+else {
+SyncDebug::log(__METHOD__.'():' . __LINE__ . ' block name not recognized...continuing');
+}
+SyncDebug::log(__METHOD__.'():' . __LINE__ . ' exiting parse_gutenberg_block()');
 		}
 
 		/**
@@ -246,228 +433,83 @@ if (!class_exists('WPSiteSync_Gutenberg_Blocks', FALSE)) {
 		public function process_gutenberg_block($content, $block_name, $json, $target_post_id, $start, $end, $pos)
 		{
 SyncDebug::log(__METHOD__.'():' . __LINE__);
-			switch ($block_name) {
-			/* Look for Atomic Block types:
-			 *	<!-- wp:atomic-blocks/ab-testimonial {"testimonialImgID":{post_id}} -->
-			 *	<!-- wp:atomic-blocks/ab-profile-box {"profileImgID":{post_id}} -->
-			 *	<!-- wp:atomic-blocks/ab-cta {"buttonText":"click here","imgID":{post_id}} -->
-			 *	<!-- wp:atomic-blocks/ab-container {"profileImgID":{post_id}} --> (property currently not supported)
-			 */
-			case 'wp:atomic-blocks/ab-testimonial':
-				$obj = json_decode($json);
-				if (!empty($json) && NULL !== $obj && isset($obj->testimonialImgID)) {
-					$source_ref_id = abs($obj->testimonialImgID);
-					if (0 !== $source_ref_id) {
-						$apicontroller = SyncApiController::get_instance();
-						$sync_model = new SyncModel();
-						$sync_data = $sync_model->get_sync_data($source_ref_id, $apicontroller->source_site_key);
-						if (NULL !== $sync_data) {
-							$target_ref_id = abs($sync_data->target_content_id);
-							$obj->testimonialImgID = $target_ref_id;
-							$new_obj_data = json_encode($obj);
-							$content = substr($content, 0, $start) . $new_obj_data . substr($content, $end + 1);
-							// no classes or other id references within HTML
-						}
-					}
+			// look for known block names
+			if (in_array($block_name, $this->_block_names)) {
+				// check to see if it's one of the form block names; skip those
+				switch ($block_name) {
+				case 'wp:uagb/cf7-styler':
+				case 'wp:uagb/gf-styler':
+					// simply return the content. this allows product specific add-ons to update Gutenberg content appropriately
+					return $content;
 				}
-				break;
 
-			case 'wp:atomic-blocks/ab-profile-box':
-			case 'wp:atomic-blocks/ab-container':
-				$obj = json_decode($json);
-				if (!empty($json) && NULL !== $obj && isset($obj->profileImgID)) {
-					$source_ref_id = abs($obj->profileImgID);
-					if (0 !== $source_ref_id) {
-						$apicontroller = SyncApiController::get_instance();
-						$sync_model = new SyncModel();
-						$sync_data = $sync_model->get_sync_data($source_ref_id, $apicontroller->source_site_key);
-						if (NULL !== $sync_data) {
-							$target_ref_id = abs($sync_data->target_content_id);
-							$obj->profileImgID = $target_ref_id;
-							$new_obj_data = json_encode($obj);
-							$content = substr($content, 0, $start) . $new_obj_data . substr($content, $end + 1);
-							// no classes or other id references within the HTML
-						}
-					}
-				}
-				break;
-
-			case 'wp:atomic-blocks/ab-cta':
-SyncDebug::log(__METHOD__.'():' . __LINE__ . ' json=' . $json);
-				$obj = json_decode($json);
-				if (!empty($json) && NULL !== $obj && isset($obj->imgID)) {
-					$source_ref_id = abs($obj->imgID);
-SyncDebug::log(__METHOD__.'():' . __LINE__ . ' ref id=' . $source_ref_id);
-					if (0 !== $source_ref_id) {
-						$apicontroller = SyncApiController::get_instance();
-						$sync_model = new SyncModel();
-						$sync_data = $sync_model->get_sync_data($source_ref_id, $apicontroller->source_site_key);
-SyncDebug::log(__METHOD__.'():' . __LINE__ . ' data=' . var_export($sync_data, TRUE));
-						if (NULL !== $sync_data) {
-							$target_ref_id = abs($sync_data->target_content_id);
-							$obj->imgID = $target_ref_id;
-							$new_obj_data = json_encode($obj);
-SyncDebug::log(__METHOD__.'():' . __LINE__ . ' new json=' . $new_obj_data);
-							$content = substr($content, 0, $start) . $new_obj_data . substr($content, $end + 1);
-							// no classes or other id references within the HTML
-						}
-					}
-				}
-				break;
-
-			/* Look for Premium Block types:
-			 *	<!-- wp:premium/banner {"imageID":{post_id},"hoverEffect":"gray","minHeight":70,"opacity":19,"id":"{id}"} -->
-			 *	<!-- wp:premium/video-box {"videoBoxId":"premium-video-box-{id}","controls":false,"overlay":true,"overlayImgID":{post_id},"overlayImgURL":"{image_url}"} -->
-			 *	<!-- wp:premium/countup {"align":"left","icon":"img","imageID":{post_id},"imageURL":"{url}","iconSize":93,"selfAlign":"flex-start"} -->
-			 *	<!-- wp:premium/dheading-block {"imageID":{post_id},"imageURL":"{url}"} -->
-			 *	<!-- wp:premium/icon {"imageID":{post_id},"imageURL":"{url}","backgroundSize":"contain"} -->
-			 *	<!-- wp:premium/icon-box {"id":"{id}","iconImage":"image","iconImgId":{post_id},"iconImgUrl":"{url}","iconSize":62,"imageID":{post_id},"imageURL":"http://guten.loc/wp-content/uploads/2018/12/space_8372725172284686336.jpg"} -->
-			 *	<!-- wp:premium/maps {"mapID":"{id}","centerLat":"38.889218","centerLng":"-77.050176","markerIconUrl":"{url}","markerIconId":{post_id},"markerCustom":true,"maxWidth":32,"boxPadding":32} -->
-			 *	Section: <!-- wp:premium/container {"imageID":{post_id},"imageURL":"{url}"} -->
-			 *	<!-- wp:premium/testimonial {"authorImgId":{pist_id},"authorImgUrl":"{url}","authorColor":"#eeeeee","authorComColor":"#eeeeee","quotColor":"#eeeeee","bodyColor":"#eeeeee","dashColor":"#abb8c3","imageID":{post_id},"imageURL":"{url}"} -->
-			 */
-
-			case 'wp:premium/banner':
-			case 'wp:premium/container':
-			case 'wp:premium/dheading-block':
-			case 'wp:premium/icon':
-				$obj = json_decode($json);
-				if (!empty($json) && NULL !== $obj) {
-					if (isset($obj->imageID)) {
-						$source_ref_id = abs($obj->imageID);
-						if (0 !== $source_ref_id) {
-							$apicontroller = SyncApiController::get_instance();
-							$sync_model = new SyncModel();
-							$sync_data = $sync_model->get_sync_data($source_ref_id, $apicontroller->source_site_key);
-							if (NULL !== $sync_data) {
-								$target_ref_id = abs($sync_data->target_content_id);
-								$obj->imageID = $target_ref_id;
-								$new_obj_data = json_encode($obj);
-								$content = substr($content, 0, $start) . $new_obj_data . substr($content, $end + 1);
-							}
-						}
-					}
-				}
-				break;
-
-			case 'wp:premium/countup':
 				$obj = json_decode($json);
 				if (!empty($json) && NULL !== $obj) {
 					$updated = FALSE;
-					if (isset($obj->imageID)) {
-						$source_ref_id = abs($obj->imageID);
-						if (0 !== $source_ref_id) {
-							$apicontroller = SyncApiController::get_instance();
-							$sync_model = new SyncModel();
-							$sync_data = $sync_model->get_sync_data($source_ref_id, $apicontroller->source_site_key);
-							if (NULL !== $sync_data) {
-								$target_ref_id = abs($sync_data->target_content_id);
-								$obj->imageID = $target_ref_id;
-								$updated = TRUE;
+					if (NULL === $this->_sync_model) {
+						// create instance if not already set
+						$this->_api_controller = SyncApiController::get_instance();
+						$this->_sync_model = new SyncModel();
+					}
+
+					$props = explode('|', $this->_props[$block_name]);
+SyncDebug::log(__METHOD__.'():' . __LINE__ . ' props=' . var_export($props, TRUE));
+					foreach ($props as $property) {
+						// check for each property name found within the block's data
+						$this->_parse_property($property);
+						$prop_name = $this->_prop_name;
+
+						if ($this->_prop_array) {								// property denotes an array reference
+							if (isset($obj->{$this->_prop_list[0]})) {			// make sure property exists
+SyncDebug::log(__METHOD__.'():' . __LINE__ . ' checking array: "' . $this->_prop_list[0] . '"');
+								$idx = 0;
+								foreach ($obj->{$this->_prop_list[0]} as &$entry) {
+									$source_ref_id = $this->_get_val($entry, $idx);
+SyncDebug::log(__METHOD__.'():' . __LINE__ . ' source ref=' . var_export($source_ref_id, TRUE));
+									if (0 !== $source_ref_id) {
+										// get the Target's post ID from the Source's post ID
+										$target_ref_id = $this->_get_target_ref($source_ref_id);
+										if (FALSE !== $target_ref_id) {
+SyncDebug::log(__METHOD__.'():' . __LINE__ . ' updating Source ID ' . $source_ref_id . ' to Target ID ' . $target_ref_id);
+											$this->_set_val($entry, $target_ref_id, $idx);
+											$updated = TRUE;
+										}
+									}
+									++$idx;
+								}
+							} // isset
+						} else {												// single reference
+							$source_ref_id = $this->_get_val($obj);
+SyncDebug::log(__METHOD__.'():' . __LINE__ . ' source ref=' . var_export($source_ref_id, TRUE));
+							if (0 !== $source_ref_id) {
+								// get the Target's post ID from the Source's post ID
+								$target_ref_id = $this->_get_target_ref($source_ref_id);
+								if (FALSE !== $target_ref_id) {
+SyncDebug::log(__METHOD__.'():' . __LINE__ . ' updating Source ID ' . $source_ref_id . ' to Target ID ' . $target_ref_id);
+									$this->_set_val($obj, $target_ref_id);
+									$updated = TRUE;
+								}
 							}
 						}
-					}
-					if (isset($obj->backgroundImageID)) {
-						$source_ref_id = abs($obj->backgroundImageID);
-						if (0 !== $source_ref_id) {
-							$apicontroller = SyncApiController::get_instance();
-							$sync_model = new SyncModel();
-							$sync_data = $sync_model->get_sync_data($source_ref_id, $apicontroller->source_site_key);
-							if (NULL !== $sync_data) {
-								$target_ref_id = abs($sync_data->target_content_id);
-								$obj->backgroundImageID = $target_ref_id;
-								$updated = TRUE;
-							}
-						}
-					}
+					} // foreach
+
 					if ($updated) {
+						// one or more properties were updated with their Target post ID values- update the content
 						$new_obj_data = json_encode($obj);
 						$content = substr($content, 0, $start) . $new_obj_data . substr($content, $end + 1);
+SyncDebug::log(__METHOD__.'():' . __LINE__ . ' original: ' . $json . PHP_EOL . ' updated: ' . $new_obj_data);
 					}
-				}
-				break;
-
-			case 'wp:premium/icon-box':
-				$obj = json_decode($json);
-				if (!empty($json) && NULL !== $obj) {
-					if (isset($obj->iconImgId)) {
-						$source_ref_id = abs($obj->iconImgId);
-						if (0 !== $source_ref_id) {
-							$apicontroller = SyncApiController::get_instance();
-							$sync_model = new SyncModel();
-							$sync_data = $sync_model->get_sync_data($source_ref_id, $apicontroller->source_site_key);
-							if (NULL !== $sync_data) {
-								$target_ref_id = abs($sync_data->target_content_id);
-								$obj->iconImgId = $target_ref_id;
-								$new_obj_data = json_encode($obj);
-								$content = substr($content, 0, $start) . $new_obj_data . substr($content, $end + 1);
-							}
-						}
-					}
-				}
-				break;
-
-			case 'wp:premium/maps':
-				$obj = json_decode($json);
-				if (!empty($json) && NULL !== $obj) {
-					if (isset($obj->markerIconId)) {
-						$source_ref_id = abs($obj->markerIconId);
-						if (0 !== $source_ref_id) {
-							$apicontroller = SyncApiController::get_instance();
-							$sync_model = new SyncModel();
-							$sync_data = $sync_model->get_sync_data($source_ref_id, $apicontroller->source_site_key);
-							if (NULL !== $sync_data) {
-								$target_ref_id = abs($sync_data->target_content_id);
-								$obj->markerIconId = $target_ref_id;
-								$new_obj_data = json_encode($obj);
-								$content = substr($content, 0, $start) . $new_obj_data . substr($content, $end + 1);
-							}
-						}
-					}
-				}
-				break;
-
-			case 'wp:premium/testimonial':
-				$obj = json_decode($json);
-				if (!empty($json) && NULL !== $obj) {
-					if (isset($obj->authorImgId)) {
-						$source_ref_id = abs($obj->authorImgId);
-						if (0 !== $source_ref_id) {
-							$apicontroller = SyncApiController::get_instance();
-							$sync_model = new SyncModel();
-							$sync_data = $sync_model->get_sync_data($source_ref_id, $apicontroller->source_site_key);
-							if (NULL !== $sync_data) {
-								$target_ref_id = abs($sync_data->target_content_id);
-								$obj->authorImgId = $target_ref_id;
-								$new_obj_data = json_encode($obj);
-								$content = substr($content, 0, $start) . $new_obj_data . substr($content, $end + 1);
-							}
-						}
-					}
-				}
-				break;
-
-			case 'wp:premium/video-box':
-				$obj = json_decode($json);
-				if (!empty($json) && NULL !== $obj) {
-					if (isset($obj->overlayImgID)) {
-						$source_ref_id = abs($obj->overlayImgID);
-						if (0 !== $source_ref_id) {
-							$apicontroller = SyncApiController::get_instance();
-							$sync_model = new SyncModel();
-							$sync_data = $sync_model->get_sync_data($source_ref_id, $apicontroller->source_site_key);
-							if (NULL !== $sync_data) {
-								$target_ref_id = abs($sync_data->target_content_id);
-								$obj->overlayImgID = $target_ref_id;
-								$new_obj_data = json_encode($obj);
-								$content = substr($content, 0, $start) . $new_obj_data . substr($content, $end + 1);
-							}
-						}
-					}
-				}
-				break;
-			}
+				} // !empty($json)
+			} // in_array($block_name, $this->_props)
+SyncDebug::log(__METHOD__.'():' . __LINE__ . ' returning');
 			return $content;
+		}
+
+		public function filter_notice_codes($msg, $code)
+		{
+SyncDebug::log(__METHOD__.'():' . __LINE__);
+			$api = $this->load_class('gutenbergblocksapirequest', TRUE);
+			return $api->filter_notice_codes($msg, $code);
 		}
 
 		/**

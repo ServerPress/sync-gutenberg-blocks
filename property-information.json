@@ -468,3 +468,61 @@ Properties for: Ultimate Addons for Gutenberg v1.13.1
 		}
 	}
 } /-->
+
+#################################################
+
+Properties for: Kadence Blocks v1.5.3
+
+<!-- wp:kadence/rowlayout
+{
+	"uniqueID":"_04222e-ed",
+	"columns":3,
+	"colLayout":"center-half",
+	"bgImg":"http://guten.loc/wp-content/uploads/2018/12/space_14079651_1766309910321290_536388646130492102_n.jpg",
+	"bgImgID":36
+	"overlayBgImg":"http://guten.loc/wp-content/uploads/2018/12/space_14079651_1766309910321290_536388646130492102_n.jpg",
+	"overlayBgImgID":35
+} -->
+
+
+<!-- wp:kadence/testimonials
+{
+	"uniqueID":"_cd0c78-2e",
+	"style":"inlineimage",
+	"testimonials":[
+		{
+			"url":"http://guten.loc/wp-content/uploads/2019/01/avatar_up-dog.jpg",
+			"id":53,
+			"alt":"",
+			"width":"",
+			"height":"",
+			"maxWidth":"",
+			"subtype":"jpeg",
+			"media":"image",
+			"icon":"fas_quote-left",
+			"isize":50,
+			"istroke":2,
+			"ititle":"",
+			"color":"#555555",
+			"title":"",
+			"content":"",
+			"name":"",
+			"occupation":"",
+			"rating":5,
+			"sizes":{
+				"thumbnail":{
+					"height":150,
+					"width":150,
+					"url":"http://guten.loc/wp-content/uploads/2019/01/avatar_up-dog-150x150.jpg",
+					"orientation":"landscape"
+				},
+				"full":{
+					"url":"http://guten.loc/wp-content/uploads/2019/01/avatar_up-dog.jpg",
+					"height":226,
+					"width":226,
+					"orientation":"landscape"
+				}
+			}
+		}
+	]
+} -->

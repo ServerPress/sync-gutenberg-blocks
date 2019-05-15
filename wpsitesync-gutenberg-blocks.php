@@ -86,6 +86,21 @@ if (!class_exists('WPSiteSync_Gutenberg_Blocks', FALSE)) {
 		//	wp:uagb/table-of-contents - no ids in json
 			'wp:uagb/team' =>							'image.id|image.author:u|image.editLink:l|image.uploadedToLink:l', #27
 			'wp:uagb/testimonial' =>					'[test_block.image.id|[test_block.image.author:u|[test_block.image.uploadedTo:p|[test_block.image.editLink:l|[test_block.image.uploadedToLink:l', #28
+
+			// properties for: Kadence Blocks v1.5.3
+		//	!wp:kadence/spacer - no ids in json
+		//	!wp:kadence/advancedbtn - no ids in json
+			'wp:kadence/rowlayout' =>					'bgImgID|overlayBgImgID', #29
+		//	wp:kadence/column - no ids in json
+		//	!wp:kadence/icon - no ids in json							
+		//	!wp:kadence/advancedheading - no ids in json
+		//	!wp:kadence/tabs - no ids in json
+		//	wp:kadence/tab - no ids in json
+		//	!wp:kadence/infobox - no ids in json
+		//	!wp:kadence/accordion - no ids in json
+		//	wp:kadence/pane - no ids in json
+		//	!wp:kadence/iconlist - no ids in json
+			'wp:kadence/testimonials' =>				'[testimonials.id',	#30
 		);
 
 		const PROPTYPE_IMAGE = 1;					// :i

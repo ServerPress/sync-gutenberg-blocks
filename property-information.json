@@ -1,528 +1,1011 @@
-Properties for: Atomic Blocks v1.4.23
-
-<!-- wp:atomic-blocks/ab-testimonial
 {
-	"testimonialImgID":{post_id}
-} -->
-
-
-<!-- wp:atomic-blocks/ab-profile-box
-{
-	"profileImgID":{post_id}
-} -->
-
-
-<!-- wp:atomic-blocks/ab-cta
-{
-	"buttonText":"click here",
-	"imgID":{post_id}
-} -->
-
-
-<!-- wp:atomic-blocks/ab-container
-{
-	"profileImgID":{post_id}
-} -->
-
-#################################################
-
-Properties for: Premium Blocks for Gutenberg v1.6.2
-
-<!-- wp:premium/banner
-{
-	"imageID":{post_id},
-	"hoverEffect":"gray",
-	"minHeight":70,
-	"opacity":19,
-	"id":"{id}"
-} -->
-
-
-<!-- wp:premium/video-box
-{
-	"videoBoxId":"premium-video-box-{id}",
-	"controls":false,
-	"overlay":true,
-	"overlayImgID":{post_id},
-	"overlayImgURL":"{image_url}"
-} -->
-
-
-<!-- wp:premium/countup
-{
-	"align":"left",
-	"icon":"img",
-	"imageID":{post_id},
-	"imageURL":"{url}",
-	"iconSize":93,
-	"selfAlign":"flex-start"
-} -->
-
-
-<!-- wp:premium/dheading-block
-{
-	"imageID":{post_id},
-	"imageURL":"{url}"
-} -->
-
-
-<!-- wp:premium/icon
-{
-	"imageID":{post_id},
-	"imageURL":"{url}",
-	"backgroundSize":"contain"
-} -->
-
-
-<!-- wp:premium/icon-box
-{
-	"id":"{id}",
-	"iconImage":"image",
-	"iconImgId":{image_id},
-	"iconImgUrl":"{url}",
-	"iconSize":62,
-	"imageID":{image_id},
-	"imageURL":"{url}"
-} -->
-
-
-<!-- wp:premium/maps
-{
-	"mapID":"{id}",
-	"centerLat":"38.889218",
-	"centerLng":"-77.050176",
-	"markerIconUrl":"{url}",
-	"markerIconId":{post_id},
-	"markerCustom":true,
-	"maxWidth":32,
-	"boxPadding":32
-} -->
-
-<!-- wp:premium/container "Section"
-{
-	"imageID":{post_id},
-	"imageURL":"{url}"
-} -->
-
-
-<!-- wp:premium/testimonial
-{
-	"authorImgId":{image_id},
-	"authorImgUrl":"{url}",
-	"authorColor":"#eeeeee",
-	"authorComColor":"#eeeeee",
-	"quotColor":"#eeeeee",
-	"bodyColor":"#eeeeee",
-	"dashColor":"#abb8c3",
-	"imageID":{image_id},
-	"imageURL":"{url}"
-} -->
-
-#################################################
-
-Properties for: Ultimate Addons for Gutenberg v1.13.1
-
-<!-- wp:uagb/blockquote
-{
-	"block_id":"23e31045-df75-4583-8e22-3fbe9b712dec",
-	"authorImage":{
-		"id":{image_id},"title":"avatar_up dog","filename":"avatar_up-dog.jpg",
-		"url":"{url}","link":"{url}","alt":"",
-		"author":"{user_id}","description":"",
-		"caption":"","name":"avatar_up-dog","status":"inherit","uploadedTo":52,
-		"date":"2019-01-08T21:47:34.000Z","modified":"2019-01-08T21:47:34.000Z",
-		"menuOrder":0,"mime":"image/jpeg","type":"image","subtype":"jpeg","icon":"/wp-includes/images/media/default.png",
-		"dateFormatted":"January 8, 2019","nonces":{
-			"update":"7aa8bb5399","delete":"fe26d91a23","edit":"6991479e9b"
-		},
-		"editLink":"/wp-admin/post.php?post={post_id}\u0026action=edit","meta":false,
-		"authorName":"admin","uploadedToLink":"/wp-admin/post.php?post={post_id}\u0026action=edit",
-		"uploadedToTitle":"gutenberg shared cover block #196","filesizeInBytes":6442,
-		"filesizeHumanReadable":"6 KB","context":"","height":226,"width":226,"orientation":"landscape",
-		"sizes":{
-			"thumbnail":{
-				"height":150,"width":150,"url":"{url}","orientation":"landscape"
-			},
-			"full":{
-				"url":"{url}","height":226,"width":226,"orientation":"landscape"
-			}
-		},
-		"compat":{
-			"item":"",
-			"meta":""
-		}
-	}
-} -->
-
-
-<!-- wp:uagb/icon-list
-{
-	"block_id":"25508afb-8fb9-4fbd-be21-d4b43c2a08d2",
-	"icon_count":2,
-	"icons":[
+	"plugins":[
 		{
-			"label":"Label #1","image_icon":"image","icon":"fab fa-arrow-circle-right",
-			"image":{
-				"id":{image_id},"title":"avatar_up dog","filename":"avatar_up-dog.jpg",
-				"url":"{url}","link":"{url}","alt":"","author":"{user_id}","description":"",
-				"caption":"","name":"avatar_up-dog","status":"inherit","uploadedTo":52,
-				"date":"2019-01-08T21:47:34.000Z","modified":"2019-01-08T21:47:34.000Z",
-				"menuOrder":0,"mime":"image/jpeg","type":"image","subtype":"jpeg",
-				"icon":"{url}","dateFormatted":"January 8, 2019","nonces":{
-					"update":"7aa8bb5399","delete":"fe26d91a23","edit":"6991479e9b"
-				},
-				"editLink":"/wp-admin/post.php?post={post_id}\u0026action=edit",
-				"meta":false,"authorName":"admin","uploadedToLink":"/wp-admin/post.php?post={post_id}\u0026action=edit",
-				"uploadedToTitle":"gutenberg shared cover block #196","filesizeInBytes":6442,
-				"filesizeHumanReadable":"6 KB","context":"","height":226,"width":226,
-				"orientation":"landscape","sizes":{
-					"thumbnail":{
-						"height":150,"width":150,"url":"{url}","orientation":"landscape"
-					},
-					"full":{
-						"url":"{url}","height":226,"width":226,"orientation":"landscape"
+			"plugin_name":"Atomic Blocks v1.4.23",
+			"blocks":[
+				{
+					"blockname":"wp:atomic-blocks/ab-testimonial",
+					"attributes":{
+						"testimonialImgID":"{image_id}"
 					}
 				},
-				"compat":{
-					"item":"","meta":""
+
+				{
+					"blockname":"wp:atomic-blocks/ab-profile-box",
+					"attributes":{
+						"profileImgID":"{image_id}"
+					}
+				},
+
+				{
+					"blockname":"wp:atomic-blocks/ab-cta",
+					"attributes":{
+						"buttonText":"click here",
+						"imgID":"{image_id}"
+					}
+				},
+
+				{
+					"blockname":"wp:atomic-blocks/ab-container",
+					"attributes":{
+						"profileImgID":"{image_id}"
+					}
 				}
-			},
-			"icon_color":"#3a3a3a","label_color":"","icon_hover_color":"","label_hover_color":"",
-			"icon_bg_color":"","icon_bg_hover_color":"","icon_border_color":"",
-			"icon_border_hover_color":"","link":"#","target":false,"disableLink":true
+			]
 		},
+
+{ "sep":"######################################################################" },
+
 		{
-			"label":"Label #2","image_icon":"image","icon":"fab fa-arrow-circle-right","image":{"id":108,"title":"hum_ass kicking","filename":"hum_ass-kicking.jpg","url":"http://guten.loc/wp-content/uploads/2019/01/hum_ass-kicking.jpg","link":"http://guten.loc/page-with-image-block/hum_ass-kicking/","alt":"","author":"1","description":"","caption":"","name":"hum_ass-kicking","status":"inherit","uploadedTo":107,"date":"2019-01-18T05:01:26.000Z","modified":"2019-01-18T05:01:26.000Z","menuOrder":0,"mime":"image/jpeg","type":"image","subtype":"jpeg","icon":"http://guten.loc/wp-includes/images/media/default.png","dateFormatted":"January 18, 2019","nonces":{"update":"050814aadb","delete":"7714944bc6","edit":"d6800d7147"},"editLink":"http://guten.loc/wp-admin/post.php?post=108\u0026action=edit","meta":false,"authorName":"admin","uploadedToLink":"http://guten.loc/wp-admin/post.php?post=107\u0026action=edit","uploadedToTitle":"page with image block #208","filesizeInBytes":13245,"filesizeHumanReadable":"13 KB","context":"","height":540,"width":541,"orientation":"landscape","sizes":{"thumbnail":{"height":150,"width":150,"url":"http://guten.loc/wp-content/uploads/2019/01/hum_ass-kicking-150x150.jpg","orientation":"landscape"},"medium":{"height":300,"width":300,"url":"http://guten.loc/wp-content/uploads/2019/01/hum_ass-kicking-300x300.jpg","orientation":"landscape"},"full":{"url":"http://guten.loc/wp-content/uploads/2019/01/hum_ass-kicking.jpg","height":540,"width":541,"orientation":"landscape"}},"compat":{"item":"","meta":""}},"icon_color":"#3a3a3a","icon_hover_color":"","icon_bg_color":"","icon_bg_hover_color":"","icon_border_color":"","icon_border_hover_color":"","link":"#","target":false,"label_color":"#7bdcb5"
+			"plugin_name":"Premium Blocks for Gutenberg v1.6.2",
+			"blocks":[
+				{
+					"blockname":"wp:premium/banner",
+					"attributes":{
+						"imageID":"{image_id}",
+						"hoverEffect":"gray",
+						"minHeight":70,
+						"opacity":19,
+						"id":"{id}"
+					}
+				},
+
+				{
+					"blockname":"wp:premium/video-box",
+					"attributes":{
+						"videoBoxId":"premium-video-box-{id}",
+						"controls":false,
+						"overlay":true,
+						"overlayImgID":"{image_id}",
+						"overlayImgURL":"{image_url}"
+					}
+				},
+
+				{
+					"blockname":"wp:premium/countup",
+					"attributes":{
+						"align":"left",
+						"icon":"img",
+						"imageID":"{image_id}",
+						"imageURL":"{url}",
+						"iconSize":93,
+						"selfAlign":"flex-start"
+					}
+				},
+
+				{
+					"blockname":"wp:premium/dheading-block",
+					"attributes":{
+						"imageID":"{image_id}",
+						"imageURL":"{url}"
+					}
+				},
+
+				{
+					"blockname":"wp:premium/icon",
+					"attributes":{
+						"imageID":"{image_id}",
+						"imageURL":"{url}",
+						"backgroundSize":"contain"
+					}
+				},
+
+				{
+					"blockname":"wp:premium/icon-box",
+					"attributes":{
+						"id":"{id}",
+						"iconImage":"image",
+						"iconImgId":"{image_id}",
+						"iconImgUrl":"{url}",
+						"iconSize":62,
+						"imageID":"{image_id}",
+						"imageURL":"{url}"
+					}
+				},
+
+				{
+					"blockname":"wp:premium/maps",
+					"attributes":{
+						"mapID":"{id}",
+						"centerLat":"38.889218",
+						"centerLng":"-77.050176",
+						"markerIconUrl":"{url}",
+						"markerIconId":"{image_id}",
+						"markerCustom":true,
+						"maxWidth":32,
+						"boxPadding":32
+					}
+				},
+
+				{
+					"blockname":"wp:premium/container",
+					"blocktitle":"Section",
+					"attributes":{
+						"imageID":"{image_id}",
+						"imageURL":"{url}"
+					}
+				},
+
+				{
+					"blockname":"wp:premium/testimonial",
+					"attributes":{
+						"authorImgId":"{image_id}",
+						"authorImgUrl":"{url}",
+						"authorColor":"#eeeeee",
+						"authorComColor":"#eeeeee",
+						"quotColor":"#eeeeee",
+						"bodyColor":"#eeeeee",
+						"dashColor":"#abb8c3",
+						"imageID":"{image_id}",
+						"imageURL":"{url}"
+					}
+				}
+			]
+		},
+
+{ "sep":"######################################################################" },
+
+		{
+			"plugin_name":"Ultimate Addons for Gutenberg v1.13.1",
+			"blocks":[
+				{
+					"blockname":"wp:uagb/blockquote",
+					"attributes":{
+						"block_id":"23e31045-df75-4583-8e22-3fbe9b712dec",
+						"authorImage":{
+							"id":"{image_id}",
+							"title":"avatar_up dog",
+							"filename":"avatar_up-dog.jpg",
+							"url":"{url}",
+							"link":"{url}","alt":"",
+							"author":"{user_id}",
+							"description":"",
+							"caption":"",
+							"name":"avatar_up-dog",
+							"status":"inherit",
+							"uploadedTo":52,
+							"date":"2019-01-08T21:47:34.000Z",
+							"modified":"2019-01-08T21:47:34.000Z",
+							"menuOrder":0,
+							"mime":"image/jpeg",
+							"type":"image",
+							"subtype":"jpeg",
+							"icon":"/wp-includes/images/media/default.png",
+							"dateFormatted":"January 8, 2019",
+							"nonces":{
+								"update":"7aa8bb5399",
+								"delete":"fe26d91a23",
+								"edit":"6991479e9b"
+							},
+							"editLink":"/wp-admin/post.php?post={post_id}\u0026action=edit",
+							"meta":false,
+							"authorName":"admin",
+							"uploadedToLink":"/wp-admin/post.php?post={post_id}\u0026action=edit",
+							"uploadedToTitle":"gutenberg shared cover block #196",
+							"filesizeInBytes":6442,
+							"filesizeHumanReadable":"6 KB",
+							"context":"",
+							"height":226,
+							"width":226,
+							"orientation":"landscape",
+							"sizes":{
+								"thumbnail":{
+									"height":150,"width":150,"url":"{url}","orientation":"landscape"
+								},
+								"full":{
+									"url":"{url}","height":226,"width":226,"orientation":"landscape"
+								}
+							},
+							"compat":{
+								"item":"",
+								"meta":""
+							}
+						}
+					}
+				},
+
+				{
+					"blockname":"wp:uagb/icon-list",
+					"attributes":{
+						"block_id":"25508afb-8fb9-4fbd-be21-d4b43c2a08d2",
+						"icon_count":2,
+						"icons":[
+							{
+								"label":"Label #1",
+								"image_icon":"image",
+								"icon":"fab fa-arrow-circle-right",
+								"image":{
+									"id":"{image_id}",
+									"title":"avatar_up dog",
+									"filename":"avatar_up-dog.jpg",
+									"url":"{url}",
+									"link":"{url}",
+									"alt":"",
+									"author":"{user_id}",
+									"description":"",
+									"caption":"",
+									"name":"avatar_up-dog",
+									"status":"inherit",
+									"uploadedTo":52,
+									"date":"2019-01-08T21:47:34.000Z",
+									"modified":"2019-01-08T21:47:34.000Z",
+									"menuOrder":0,
+									"mime":"image/jpeg",
+									"type":"image",
+									"subtype":"jpeg",
+									"icon":"{url}",
+									"dateFormatted":"January 8, 2019",
+									"nonces":{
+										"update":"7aa8bb5399",
+										"delete":"fe26d91a23",
+										"edit":"6991479e9b"
+									},
+									"editLink":"/wp-admin/post.php?post={post_id}\u0026action=edit",
+									"meta":false,
+									"authorName":"admin",
+									"uploadedToLink":"/wp-admin/post.php?post={post_id}\u0026action=edit",
+									"uploadedToTitle":"gutenberg shared cover block #196",
+									"filesizeInBytes":6442,
+									"filesizeHumanReadable":"6 KB",
+									"context":"",
+									"height":226,
+									"width":226,
+									"orientation":"landscape",
+									"sizes":{
+										"thumbnail":{
+											"height":150,
+											"width":150,
+											"url":"{url}",
+											"orientation":"landscape"
+										},
+										"full":{
+											"url":"{url}",
+											"height":226,
+											"width":226,
+											"orientation":"landscape"
+										}
+									},
+									"compat":{
+										"item":"",
+										"meta":""
+									}
+								},
+								"icon_color":"#3a3a3a",
+								"label_color":"",
+								"icon_hover_color":"",
+								"label_hover_color":"",
+								"icon_bg_color":"",
+								"icon_bg_hover_color":"",
+								"icon_border_color":"",
+								"icon_border_hover_color":"",
+								"link":"#",
+								"target":false,
+								"disableLink":true
+							},
+							{
+								"label":"Label #2","image_icon":"image","icon":"fab fa-arrow-circle-right","image":{"id":108,"title":"hum_ass kicking","filename":"hum_ass-kicking.jpg","url":"http://guten.loc/wp-content/uploads/2019/01/hum_ass-kicking.jpg","link":"http://guten.loc/page-with-image-block/hum_ass-kicking/","alt":"","author":"1","description":"","caption":"","name":"hum_ass-kicking","status":"inherit","uploadedTo":107,"date":"2019-01-18T05:01:26.000Z","modified":"2019-01-18T05:01:26.000Z","menuOrder":0,"mime":"image/jpeg","type":"image","subtype":"jpeg","icon":"http://guten.loc/wp-includes/images/media/default.png","dateFormatted":"January 18, 2019","nonces":{"update":"050814aadb","delete":"7714944bc6","edit":"d6800d7147"},"editLink":"http://guten.loc/wp-admin/post.php?post=108\u0026action=edit","meta":false,"authorName":"admin","uploadedToLink":"http://guten.loc/wp-admin/post.php?post=107\u0026action=edit","uploadedToTitle":"page with image block #208","filesizeInBytes":13245,"filesizeHumanReadable":"13 KB","context":"","height":540,"width":541,"orientation":"landscape","sizes":{"thumbnail":{"height":150,"width":150,"url":"http://guten.loc/wp-content/uploads/2019/01/hum_ass-kicking-150x150.jpg","orientation":"landscape"},"medium":{"height":300,"width":300,"url":"http://guten.loc/wp-content/uploads/2019/01/hum_ass-kicking-300x300.jpg","orientation":"landscape"},"full":{"url":"http://guten.loc/wp-content/uploads/2019/01/hum_ass-kicking.jpg","height":540,"width":541,"orientation":"landscape"}},"compat":{"item":"","meta":""}},"icon_color":"#3a3a3a","icon_hover_color":"","icon_bg_color":"","icon_bg_hover_color":"","icon_border_color":"","icon_border_hover_color":"","link":"#","target":false,"label_color":"#7bdcb5"
+							}
+						]
+					}
+				},
+
+				{
+					"blockname":"wp:uagb/info-box",
+					"attributes":{
+						"source_type":"image",
+						"block_id":"{id}",
+						"iconImage":{
+							"id":"{image_id}",
+							"title":"avatar_up dog",
+							"filename":"avatar_up-dog.jpg",
+							"url":"{url}",
+							"link":"url",
+							"alt":"",
+							"author":"{user_id}",
+							"description":"",
+							"caption":"",
+							"name":"avatar_up-dog",
+							"status":"inherit",
+							"uploadedTo":52,
+							"date":"2019-01-08T21:47:34.000Z",
+							"modified":"2019-01-08T21:47:34.000Z",
+							"menuOrder":0,
+							"mime":"image/jpeg",
+							"type":"image",
+							"subtype":"jpeg",
+							"icon":"/wp-includes/images/media/default.png",
+							"dateFormatted":"January 8, 2019",
+							"nonces":{
+								"update":"f93e1e2aaf",
+								"delete":"1e989927b4",
+								"edit":"513369b39c"
+							},
+							"editLink":"/wp-admin/post.php?post=53\u0026action=edit",
+							"meta":false,
+							"authorName":"admin",
+							"uploadedToLink":"/wp-admin/post.php?post=52\u0026action=edit",
+							"uploadedToTitle":"gutenberg shared cover block #196",
+							"filesizeInBytes":6442,
+							"filesizeHumanReadable":"6 KB",
+							"context":"",
+							"height":226,
+							"width":226,
+							"orientation":"landscape",
+							"sizes":{
+								"thumbnail":{
+									"height":150,
+									"width":150,
+									"url":"{url}",
+									"orientation":"landscape"
+								},
+								"full":{
+									"url":"{url}",
+									"height":226,
+									"width":226,
+									"orientation":"landscape"
+								}
+							},
+							"compat":{
+								"item":"",
+								"meta":""
+							}
+						}
+					}
+				},
+
+				{
+					"blockname":"wp:uagb/restaurant-menu",
+					"blocktitle":"Price List",
+					"attributes":{
+						"rest_menu_item_arr":
+							[
+								{
+									"description":"Lorem ipsumdolor sit amet, consectetur adipiscing elit.",
+									"title":"Menu Item 1",
+									"price":"$9",
+									"image":{
+										"id":"{image_id}",
+										"title":"hum_cancer",
+										"filename":"hum_cancer.jpg",
+										"url":"{url}",
+										"link":"{url}",
+										"alt":"",
+										"author":"{user_id}",
+										"description":"",
+										"caption":"",
+										"name":"hum_cancer",
+										"status":"inherit",
+										"uploadedTo":117,
+										"date":"2019-02-08T21:13:42.000Z",
+										"modified":"2019-02-08T21:13:42.000Z",
+										"menuOrder":0,
+										"mime":"image/jpeg",
+										"type":"image",
+										"subtype":"jpeg",
+										"icon":"/wp-includes/images/media/default.png",
+										"dateFormatted":"February 8, 2019",
+										"nonces":{
+											"update":"0985c15ba5",
+											"delete":"f5f807ebc1",
+											"edit":"7a873ac814"
+										},
+										"editLink":"/wp-admin/post.php?post={post_id}\u0026action=edit",
+										"meta":false,
+										"authorName":"{username}",
+										"uploadedToLink":"/wp-admin/post.php?post={post_id}\u0026action=edit",
+										"uploadedToTitle":"atomic blocks- testimonial",
+										"filesizeInBytes":42379,
+										"filesizeHumanReadable":"41 KB",
+										"context":"",
+										"height":425,
+										"width":385,
+										"orientation":"portrait",
+										"sizes":{
+											"thumbnail":{
+												"height":150,
+												"width":150,
+												"url":"{url}",
+												"orientation":"landscape"
+											},
+											"medium":{
+												"height":300,
+												"width":272,
+												"url":"{url}",
+												"orientation":"portrait"
+											},
+											"full":{
+												"url":"{url}",
+												"height":425,
+												"width":385,
+												"orientation":"portrait"
+											}
+										},
+										"compat":{
+											"item":"",
+											"meta":""
+										}
+									}
+								},
+								{}
+							],
+						"block_id":"a476991e-ae91-41a8-8eb2-76c151ac9153"
+					}
+				},
+
+				{
+					"blockname":"wp:uagb/section",
+					"attributes":{
+						"block_id":"9d2e6229-896e-4f66-beb9-7e84bd7a015c",
+						"backgroundType":"image",
+						"backgroundImage":{
+							"id":"{image_id}",
+							"title":"space_8372725172284686336",
+							"filename":"space_8372725172284686336.jpg",
+							"url":"{url}",
+							"link":"{url}",
+							"alt":"",
+							"author":"{user_id}",
+							"description":"",
+							"caption":"",
+							"name":"space_8372725172284686336",
+							"status":"inherit",
+							"uploadedTo":28,
+							"date":"2018-12-19T23:58:04.000Z",
+							"modified":"2018-12-19T23:58:04.000Z",
+							"menuOrder":0,
+							"mime":"image/jpeg",
+							"type":"image",
+							"subtype":"jpeg",
+							"icon":"{url}",
+							"dateFormatted":"December 19, 2018",
+							"nonces":{
+								"update":"32c4fab118",
+								"delete":"1b7ac4c0f1",
+								"edit":"ad330878fd"
+							},
+							"editLink":"/wp-admin/post.php?post={image_id}\u0026action=edit",
+							"meta":false,
+							"authorName":"admin",
+							"uploadedToLink":"/wp-admin/post.php?post={post_id}\u0026action=edit",
+							"uploadedToTitle":"gutenberg cover block",
+							"filesizeInBytes":67020,
+							"filesizeHumanReadable":"65 KB",
+							"context":"",
+							"height":900,
+							"width":1350,
+							"orientation":"landscape",
+							"sizes":{
+								"thumbnail":{
+									"height":150,
+									"width":150,
+									"url":"{url}",
+									"orientation":"landscape"
+								},
+								"medium":{
+									"height":200,
+									"width":300,
+									"url":"{url}",
+									"orientation":"landscape"
+								},
+								"large":{
+									"height":350,
+									"width":525,
+									"url":"{url}",
+									"orientation":"landscape"
+								},
+								"full":{
+									"url":"{url}",
+									"height":900,
+									"width":1350,
+									"orientation":"landscape"
+								}
+							},
+							"compat":{
+								"item":"",
+								"meta":""
+							}
+						}
+					}
+				},
+
+				{
+					"blockname":"wp:uagb/social-share",
+					"attributes":{
+						"block_id":"0fb8dfac-58d8-438a-8b82-bd13050f9043",
+						"current_url":"{url}",
+						"social_count":2,
+						"socials":[
+							{
+								"type":"facebook",
+								"image_icon":"image",
+								"icon":"fab fa-facebook",
+								"image":{
+									"id":"{image_id}",
+									"title":"avatar_up dog",
+									"filename":"avatar_up-dog.jpg",
+									"url":"{url}",
+									"link":"{url}",
+									"alt":"",
+									"author":"{user_id}",
+									"description":"",
+									"caption":"",
+									"name":"avatar_up-dog",
+									"status":"inherit",
+									"uploadedTo":"{post_id}",
+									"date":"2019-01-08T21:47:34.000Z",
+									"modified":"2019-01-08T21:47:34.000Z",
+									"menuOrder":0,
+									"mime":"image/jpeg",
+									"type":"image",
+									"subtype":"jpeg",
+									"icon":"{url}",
+									"dateFormatted":"January 8, 2019",
+									"nonces":{
+										"update":"7aa8bb5399",
+										"delete":"fe26d91a23",
+										"edit":"6991479e9b"
+									},
+									"editLink":"/wp-admin/post.php?post={post_id}\u0026action=edit",
+									"meta":false,
+									"authorName":"admin",
+									"uploadedToLink":"/wp-admin/post.php?post={post_id}\u0026action=edit",
+									"uploadedToTitle":"gutenberg shared cover block #196",
+									"filesizeInBytes":6442,
+									"filesizeHumanReadable":"6 KB",
+									"context":"",
+									"height":226,
+									"width":226,
+									"orientation":"landscape",
+									"sizes":{
+										"thumbnail":{
+											"height":150,
+											"width":150,
+											"url":"{url}",
+											"orientation":"landscape"
+										},
+										"full":{
+											"url":"{url}",
+											"height":226,
+											"width":226,
+											"orientation":"landscape"
+										}
+									},
+									"compat":{
+										"item":"",
+										"meta":""
+									}
+								},
+								"icon_color":"#3a3a3a",
+								"icon_hover_color":"",
+								"icon_bg_color":"",
+								"icon_bg_hover_color":""
+							},
+							{}
+						]
+					}
+				},
+
+				{
+					"blockname":"wp:uagb/team",
+					"attributes":{
+						"block_id":"22753167-04a7-40e2-b325-edc6efa5669a",
+						"image":{
+							"id":"{image_id}",
+							"title":"avatar_up dog",
+							"filename":"avatar_up-dog.jpg",
+							"url":"{url}",
+							"link":"{url}",
+							"alt":"",
+							"author":"{user_id}",
+							"description":"",
+							"caption":"",
+							"name":"avatar_up-dog",
+							"status":"inherit",
+							"uploadedTo":"{post_id}",
+							"date":"2019-01-08T21:47:34.000Z",
+							"modified":"2019-01-08T21:47:34.000Z",
+							"menuOrder":0,
+							"mime":"image/jpeg",
+							"type":"image",
+							"subtype":"jpeg",
+							"icon":"{url}",
+							"dateFormatted":"January 8, 2019",
+							"nonces":{
+								"update":"7aa8bb5399",
+								"delete":"fe26d91a23",
+								"edit":"6991479e9b"
+							},
+							"editLink":"/wp-admin/post.php?post={post_id}\u0026action=edit",
+							"meta":false,
+							"authorName":"admin",
+							"uploadedToLink":"/wp-admin/post.php?post={post_id}\u0026action=edit",
+							"uploadedToTitle":"gutenberg shared cover block #196",
+							"filesizeInBytes":6442,
+							"filesizeHumanReadable":"6 KB",
+							"context":"",
+							"height":226,
+							"width":226,
+							"orientation":"landscape",
+							"sizes":{
+								"thumbnail":{
+									"height":150,
+									"width":150,
+									"url":"{url}",
+									"orientation":"landscape"
+								},
+								"full":{
+									"url":"{url}",
+									"height":226,
+									"width":226,
+									"orientation":"landscape"
+								}
+							},
+							"compat":{
+								"item":"",
+								"meta":""
+							}
+						}
+					}
+				},
+
+				{
+					"blockname":"wp:uagb/testimonial",
+					"attributes":{
+						"test_item_count":4,
+						"test_block":
+							[
+								{
+									"description":"I have been working with these guys since years now! With lots of hard work and timely communication they made sure they delivered the best to me. Highly recommended!",
+									"name":"John Doe ",
+									"company":"Company1",
+									"image":{
+										"id":"{image_id}",
+										"title":"space_8372725172284686336",
+										"filename":"space_8372725172284686336.jpg",
+										"url":"{url}",
+										"link":"{url}",
+										"alt":"",
+										"author":"{user_id}",
+										"description":"",
+										"caption":"",
+										"name":"space_8372725172284686336",
+										"status":"inherit",
+										"uploadedTo":"{post_id}",
+										"date":"2018-12-19T23:58:04.000Z",
+										"modified":"2018-12-19T23:58:04.000Z",
+										"menuOrder":0,
+										"mime":"image/jpeg",
+										"type":"image",
+										"subtype":"jpeg",
+										"icon":"{url}",
+										"dateFormatted":"December 19, 2018",
+										"nonces":{
+											"update":"c09376f6bb",
+											"delete":"24d2b5d1b1",
+											"edit":"8a17485076"
+										},
+										"editLink":"/wp-admin/post.php?post={image_id}\u0026action=edit",
+										"meta":false,
+										"authorName":"{username}",
+										"uploadedToLink":"/wp-admin/post.php?post={post_id}\u0026action=edit",
+										"uploadedToTitle":"gutenberg cover block",
+										"filesizeInBytes":67020,
+										"filesizeHumanReadable":"65 KB",
+										"context":"",
+										"height":900,
+										"width":1350,
+										"orientation":"landscape",
+										"sizes":{
+											"thumbnail":{
+												"height":150,
+												"width":150,
+												"url":"{url}",
+												"orientation":"landscape"
+											},
+											"medium":{
+												"height":200,
+												"width":300,
+												"url":"{url}",
+												"orientation":"landscape"
+											},
+											"large":{
+												"height":350,
+												"width":525,
+												"url":"{url}",
+												"orientation":"landscape"
+											},
+											"full":{
+												"url":"{url}",
+												"height":900,
+												"width":1350,
+												"orientation":"landscape"
+											}
+										},
+										"compat":{
+											"item":"",
+											"meta":""
+										}
+									}
+								},
+							],
+						"block_id":"d15abc12-cea8-4fad-a99b-39e073c14aa6"
+					}
+				},
+
+				{
+					"blockname":"wp:uagb/cf7-styler",
+					"attributes":{
+						"block_id":"1e715529-c466-4a53-aac8-369e16fe4cc2",
+						"formId":"202",
+						"isHtml":true,
+						"formJson":{
+							"success":true,
+							"data":{
+								"html":"\u003cdiv role=\u0022form\u0022 class=\u0022wpcf7\u0022 id=\u0022wpcf7-f202-o1\u0022 lang=\u0022en-US\u0022 dir=\u0022ltr\u0022\u003e\n\u003cdiv class=\u0022screen-reader-response\u0022\u003e\u003c/div\u003e\n\u003cform action=\u0022/wp-admin/admin-ajax.php#wpcf7-f202-o1\u0022 method=\u0022post\u0022 class=\u0022wpcf7-form\u0022 novalidate=\u0022novalidate\u0022\u003e\n\u003cdiv style=\u0022display: none;\u0022\u003e\n\u003cinput type=\u0022hidden\u0022 name=\u0022_wpcf7\u0022 value=\u0022202\u0022 /\u003e\n\u003cinput type=\u0022hidden\u0022 name=\u0022_wpcf7_version\u0022 value=\u00225.1.1\u0022 /\u003e\n\u003cinput type=\u0022hidden\u0022 name=\u0022_wpcf7_locale\u0022 value=\u0022en_US\u0022 /\u003e\n\u003cinput type=\u0022hidden\u0022 name=\u0022_wpcf7_unit_tag\u0022 value=\u0022wpcf7-f202-o1\u0022 /\u003e\n\u003cinput type=\u0022hidden\u0022 name=\u0022_wpcf7_container_post\u0022 value=\u00220\u0022 /\u003e\n\u003cinput type=\u0022hidden\u0022 name=\u0022g-recaptcha-response\u0022 value=\u0022\u0022 /\u003e\n\u003c/div\u003e\n\u003cp\u003e\u003clabel\u003e Your Name (required)\u003cbr /\u003e\n    \u003cspan class=\u0022wpcf7-form-control-wrap your-name\u0022\u003e\u003cinput type=\u0022text\u0022 name=\u0022your-name\u0022 value=\u0022\u0022 size=\u002240\u0022 class=\u0022wpcf7-form-control wpcf7-text wpcf7-validates-as-required\u0022 aria-required=\u0022true\u0022 aria-invalid=\u0022false\u0022 /\u003e\u003c/span\u003e \u003c/label\u003e\u003c/p\u003e\n\u003cp\u003e\u003clabel\u003e Your Email (required)\u003cbr /\u003e\n    \u003cspan class=\u0022wpcf7-form-control-wrap your-email\u0022\u003e\u003cinput type=\u0022email\u0022 name=\u0022your-email\u0022 value=\u0022\u0022 size=\u002240\u0022 class=\u0022wpcf7-form-control wpcf7-text wpcf7-email wpcf7-validates-as-required wpcf7-validates-as-email\u0022 aria-required=\u0022true\u0022 aria-invalid=\u0022false\u0022 /\u003e\u003c/span\u003e \u003c/label\u003e\u003c/p\u003e\n\u003cp\u003e\u003clabel\u003e Subject\u003cbr /\u003e\n    \u003cspan class=\u0022wpcf7-form-control-wrap your-subject\u0022\u003e\u003cinput type=\u0022text\u0022 name=\u0022your-subject\u0022 value=\u0022\u0022 size=\u002240\u0022 class=\u0022wpcf7-form-control wpcf7-text\u0022 aria-invalid=\u0022false\u0022 /\u003e\u003c/span\u003e \u003c/label\u003e\u003c/p\u003e\n\u003cp\u003e\u003clabel\u003e Your Message\u003cbr /\u003e\n    \u003cspan class=\u0022wpcf7-form-control-wrap your-message\u0022\u003e\u003ctextarea name=\u0022your-message\u0022 cols=\u002240\u0022 rows=\u002210\u0022 class=\u0022wpcf7-form-control wpcf7-textarea\u0022 aria-invalid=\u0022false\u0022\u003e\u003c/textarea\u003e\u003c/span\u003e \u003c/label\u003e\u003c/p\u003e\n\u003cp\u003e\u003cinput type=\u0022submit\u0022 value=\u0022Send\u0022 class=\u0022wpcf7-form-control wpcf7-submit\u0022 /\u003e\u003c/p\u003e\n\u003cdiv class=\u0022wpcf7-response-output wpcf7-display-none\u0022\u003e\u003c/div\u003e\u003c/form\u003e\u003c/div\u003e"
+							}
+						}
+					}
+				},
+
+				{
+					"blockname":"wp:uagb/gf-styler",
+					"attributes":{
+						"block_id":"d2e971a2-8e1f-4107-9c42-fce61133b632",
+						"formId":"1",
+						"isHtml":true,
+						"formJson":{
+							"success":true,
+							"data":{
+								"html":"\r\n\n\
+									\u003cdiv class='gf_browser_chrome gform_wrapper' id='gform_wrapper_1' \u003e\n\
+										\u003ca id='gf_1' class='gform_anchor' \u003e\n\
+										\u003c/a\u003e\n\
+										\u003cform method='post' enctype='multipart/form-data' target='gform_ajax_frame_1' id='gform_1'  action='/wp-admin/admin-ajax.php#gf_1'\u003e\n\
+										\r\n\n\
+										\u003cdiv class='gform_heading'\u003e\r\n\n\
+											\u003ch3 class='gform_title'\u003eform\u003c/h3\u003e\n\
+											\r\n\n\
+											\u003cspan class='gform_description'\u003edescription\u003c/span\u003e\r\n                        \u003c/div\u003e\r\n                        \u003cdiv class='gform_body'\u003e\u003cul id='gform_fields_1' class='gform_fields top_label form_sublabel_below description_below'\u003e\u003cli id='field_1_1' class='gfield field_sublabel_below field_description_below' \u003e\u003clabel class='gfield_label' for='input_1_1' \u003eField\u003c/label\u003e\u003cdiv class='ginput_container'\u003e\u003cinput name='input_1' id='input_1_1' type='text' value='' class='medium'  tabindex='1'   /\u003e\u003c/div\u003e\u003cdiv class='gfield_description'\u003edesc\u003c/div\u003e\u003c/li\u003e\r\n                            \u003c/ul\u003e\u003c/div\u003e\r\n        \u003cdiv class='gform_footer top_label'\u003e \u003cinput type='submit' id='gform_submit_button_1' class='gform_button button' value='Submit' tabindex='2' onclick='if(window[\u0022gf_submitting_1\u0022]){return false;}  window[\u0022gf_submitting_1\u0022]=true;  ' /\u003e \u003cinput type='hidden' name='gform_ajax' value='form_id=1\u0026amp;title=1\u0026amp;description=1\u0026amp;tabindex=1' /\u003e\r\n            \u003cinput type='hidden' class='gform_hidden' name='is_submit_1' value='1' /\u003e\r\n            \u003cinput type='hidden' class='gform_hidden' name='gform_submit' value='1' /\u003e\r\n            \r\n            \u003cinput type='hidden' class='gform_hidden' name='gform_unique_id' value='' /\u003e\r\n            \u003cinput type='hidden' class='gform_hidden' name='state_1' value='WyJbXSIsIjAwOTg2OGNlODgyOGI1NDQwZGNjZjI1NzhkYTNiZGQ2Il0=' /\u003e\r\n            \u003cinput type='hidden' class='gform_hidden' name='gform_target_page_number_1' id='gform_target_page_number_1' value='0' /\u003e\r\n            \u003cinput type='hidden' class='gform_hidden' name='gform_source_page_number_1' id='gform_source_page_number_1' value='1' /\u003e\r\n            \u003cinput type='hidden' name='gform_field_values' value='' /\u003e\r\n   \r\n        \u003c/div\u003e\r\n                        \u003c/form\u003e\r\n                        \u003c/div\u003e\r\n                \u003ciframe style='display:none;width:0px;height:0px;' src='about:blank' name='gform_ajax_frame_1' id='gform_ajax_frame_1'\u003e\u003c/iframe\u003e\r\n                \u003cscript type='text/javascript'\u003ejQuery(document).ready(function($){gformInitSpinner( 1, 'http://guten.loc/wp-content/plugins/gravityforms/images/spinner.gif' );jQuery('#gform_ajax_frame_1').load( function(){var contents = jQuery(this).contents().find('*').html();var is_postback = contents.indexOf('GF_AJAX_POSTBACK') \u003e= 0;if(!is_postback){return;}var form_content = jQuery(this).contents().find('#gform_wrapper_1');var is_confirmation = jQuery(this).contents().find('#gform_confirmation_wrapper_1').length \u003e 0;var is_redirect = contents.indexOf('gformRedirect(){') \u003e= 0;var is_form = form_content.length \u003e 0 \u0026\u0026 ! is_redirect \u0026\u0026 ! is_confirmation;if(is_form){jQuery('#gform_wrapper_1').html(form_content.html());setTimeout( function() { /* delay the scroll by 50 milliseconds to fix a bug in chrome */ jQuery(document).scrollTop(jQuery('#gform_wrapper_1').offset().top); }, 50 );if(window['gformInitDatepicker']) {gformInitDatepicker();}if(window['gformInitPriceFields']) {gformInitPriceFields();}var current_page = jQuery('#gform_source_page_number_1').val();gformInitSpinner( 1, 'http://guten.loc/wp-content/plugins/gravityforms/images/spinner.gif' );jQuery(document).trigger('gform_page_loaded', [1, current_page]);window['gf_submitting_1'] = false;}else if(!is_redirect){var confirmation_content = jQuery(this).contents().find('#gforms_confirmation_message_1').html();if(!confirmation_content){confirmation_content = contents;}setTimeout(function(){jQuery('#gform_wrapper_1').replaceWith('\u003c' + 'div id=\\'gforms_confirmation_message_1\\' class=\\'gform_confirmation_message_1 gforms_confirmation_message\\'' + '\u003e' + confirmation_content + '\u003c' + '/div' + '\u003e');jQuery(document).scrollTop(jQuery('#gforms_confirmation_message_1').offset().top);jQuery(document).trigger('gform_confirmation_loaded', [1]);window['gf_submitting_1'] = false;}, 50);}else{jQuery('#gform_1').append(contents);if(window['gformRedirect']) {gformRedirect();}}jQuery(document).trigger('gform_post_render', [1, current_page]);} );} );\u003c/script\u003e\u003cscript type='text/javascript'\u003e if(typeof gf_global == 'undefined') var gf_global = {\u0022gf_currency_config\u0022:{\u0022name\u0022:\u0022U.S. Dollar\u0022,\u0022symbol_left\u0022:\u0022$\u0022,\u0022symbol_right\u0022:\u0022\u0022,\u0022symbol_padding\u0022:\u0022\u0022,\u0022thousand_separator\u0022:\u0022,\u0022,\u0022decimal_separator\u0022:\u0022.\u0022,\u0022decimals\u0022:2},\u0022base_url\u0022:\u0022http:\\/\\/guten.loc\\/wp-content\\/plugins\\/gravityforms\u0022,\u0022number_formats\u0022:[],\u0022spinnerUrl\u0022:\u0022http:\\/\\/guten.loc\\/wp-content\\/plugins\\/gravityforms\\/images\\/spinner.gif\u0022};jQuery(document).bind('gform_post_render', function(event, formId, currentPage){if(formId == 1) {} } );jQuery(document).bind('gform_post_conditional_logic', function(event, formId, fields, isInit){} );\u003c/script\u003e\u003cscript type='text/javascript'\u003e jQuery(document).ready(function(){jQuery(document).trigger('gform_post_render', [1, 1]) } ); \u003c/script\u003e"
+							}
+						}
+					}
+				}
+			]
+		},
+
+{ "sep":"######################################################################" },
+
+		{
+			"plugin_name":"Kadence Blocks v1.5.3",
+			"blocks":[
+				{
+					"blockname":"wp:kadence/rowlayout",
+					"attributes":{
+						"uniqueID":"_04222e-ed",
+						"columns":3,
+						"colLayout":"center-half",
+						"bgImg":"http://guten.loc/wp-content/uploads/2018/12/space_14079651_1766309910321290_536388646130492102_n.jpg",
+						"bgImgID":"{image_id}",
+						"overlayBgImg":"http://guten.loc/wp-content/uploads/2018/12/space_14079651_1766309910321290_536388646130492102_n.jpg",
+						"overlayBgImgID":"{image_id}"
+					}
+				},
+
+				{
+					"blockname":"wp:kadence/testimonials",
+					"attributes":{
+						"uniqueID":"_cd0c78-2e",
+						"style":"inlineimage",
+						"testimonials":[
+							{
+								"url":"http://guten.loc/wp-content/uploads/2019/01/avatar_up-dog.jpg",
+								"id":"{image_id}",
+								"alt":"",
+								"width":"",
+								"height":"",
+								"maxWidth":"",
+								"subtype":"jpeg",
+								"media":"image",
+								"icon":"fas_quote-left",
+								"isize":50,
+								"istroke":2,
+								"ititle":"",
+								"color":"#555555",
+								"title":"",
+								"content":"",
+								"name":"",
+								"occupation":"",
+								"rating":5,
+								"sizes":{
+									"thumbnail":{
+										"height":150,
+										"width":150,
+										"url":"http://guten.loc/wp-content/uploads/2019/01/avatar_up-dog-150x150.jpg",
+										"orientation":"landscape"
+									},
+									"full":{
+										"url":"http://guten.loc/wp-content/uploads/2019/01/avatar_up-dog.jpg",
+										"height":226,
+										"width":226,
+										"orientation":"landscape"
+									}
+								}
+							}
+						]
+					}
+				}
+			]
+		},
+
+{ "sep":"######################################################################" },
+
+		{
+			"plugin_name":"Advanced Gutenberg v1.10.10",
+			"blocks":[
+				{
+					"blockname":"wp:advgb/image",
+					"attributes":{
+						"imageUrl":"http://guten.loc/wp-content/uploads/2018/12/space_516678.jpg",
+						"imageID":"{image_id}",
+						"title":"title of image",
+						"subtitle":"subtitle of image",
+						"changed":true
+					}
+				},
+
+				{
+					"blockname":"wp:advgb/video",
+					"attributes":{
+						"videoURL":"http://guten.loc/wp-content/uploads/2018/12/seo_trends-2016.mp4",
+						"videoID":"{media_id}",
+						"videoSourceType":"local",
+						"videoTitle":"seo_trends 2016",
+						"poster":"http://guten.loc/wp-content/uploads/2018/12/space_12309682_1188868704460100_4825139269154178032_o.jpg",
+						"posterID":"{image_id}",
+						"changed":true
+					}
+				},
+
+				{
+					"blockname":"wp:advgb/images-slider",
+					"attributes":{
+						"images":[
+							{
+								"url":"http://guten.loc/wp-content/uploads/2018/07/space_2539.jpg",
+								"id":"{image_id}",
+								"title":"title",
+								"text":"text 1"},
+							{
+								"id":"{image_id}",
+								"url":"http://guten.loc/wp-content/uploads/2018/12/space_516678.jpg",
+								"title":"image 2",
+								"text":"title"},
+							{
+								"id":"{image_id}",
+								"url":"http://guten.loc/wp-content/uploads/2018/12/space_14079651_1766309910321290_536388646130492102_n.jpg",
+								"title":"image 3",
+								"text":"image 3 title"
+							}
+						],
+						"changed":true
+					}
+				},
+
+				{
+					"blockname":"wp:advgb/map",
+					"attributes":{
+						"mapID":"advgbmap-333b3874-2a0f-4826-b435-674540d9224c",
+						"address":"20382 kelvingrove ln, huntington beach, ca 92646",
+						"markerIcon":"http://guten.loc/wp-content/uploads/2019/01/avatar_up-dog-150x150.jpg",
+						"markerIconID":"{image_id}",
+						"markerTitle":"marker",
+						"markerDesc":"you are here",
+						"changed":true
+					}
+				},
+
+				{
+					"blockname":"wp:advgb/social-links",
+					"attributes":{
+						"items":[
+							{
+								"icon":"http://guten.loc/wp-content/uploads/2019/01/avatar_up-dog-150x150.jpg",
+								"iconID":"{image_id}",
+								"iconColor":"",
+								"link":"https://google.com"
+							},
+							{
+								"icon":"facebook",
+								"iconID":"",
+								"iconColor":"",
+								"link":"#facebook"
+							},
+							{
+								"icon":"",
+								"iconID":"",
+								"iconColor":"",
+								"link":"#"
+							}
+						],
+						"changed":true
+					}
+				},
+
+				{
+					"blockname":"wp:advgb/testimonial",
+					"attributes":{
+						"avatarBorderWidth":0,
+						"nameColor":"#313131",
+						"columns":2,
+						"changed":true,
+						"items":
+							[
+								{
+									"avatarUrl":"http://guten.loc/wp-content/uploads/2019/01/avatar_up-dog-150x150.jpg",
+									"avatarID":"{image_id}",
+									"name":"name of person",
+									"position":"title",
+									"desc":"short description, blah blah"
+								},
+								{
+									"avatarUrl":"http://guten.loc/wp-content/uploads/2018/12/space_14079651_1766309910321290_536388646130492102_n-150x150.jpg",
+									"avatarID":"{image_id}",
+									"name":"another name",
+									"position":"position",
+									"desc":"more stuff, blah blah"
+								},
+								{
+									"avatarUrl":"http://guten.loc/wp-content/plugins/advanced-gutenberg/assets/blocks/testimonial/avatar-placeholder.png",
+									"name":"Person Name",
+									"position":"Job Position",
+									"desc":"A little description about this person will show up here."
+								},
+								{
+									"avatarUrl":"http://guten.loc/wp-content/plugins/advanced-gutenberg/assets/blocks/testimonial/avatar-placeholder.png",
+									"name":"Person Name",
+									"position":"Job Position",
+									"desc":"A little description about this person will show up here."
+								},
+								{
+									"avatarUrl":"http://guten.loc/wp-content/plugins/advanced-gutenberg/assets/blocks/testimonial/avatar-placeholder.png",
+									"name":"Person Name",
+									"position":"Job Position",
+									"desc":"A little description about this person will show up here."
+								},
+								{
+									"avatarUrl":"http://guten.loc/wp-content/plugins/advanced-gutenberg/assets/blocks/testimonial/avatar-placeholder.png",
+									"name":"Person Name",
+									"position":"Job Position",
+									"desc":"A little description about this person will show up here."
+								},
+								{
+									"avatarUrl":"http://guten.loc/wp-content/plugins/advanced-gutenberg/assets/blocks/testimonial/avatar-placeholder.png",
+									"name":"Person Name",
+									"position":"Job Position",
+									"desc":"A little description about this person will show up here."
+								},
+								{
+									"avatarUrl":"http://guten.loc/wp-content/plugins/advanced-gutenberg/assets/blocks/testimonial/avatar-placeholder.png",
+									"name":"Person Name",
+									"position":"Job Position",
+									"desc":"A little description about this person will show up here."
+								},
+								{
+									"avatarUrl":"http://guten.loc/wp-content/plugins/advanced-gutenberg/assets/blocks/testimonial/avatar-placeholder.png",
+									"name":"Person Name",
+									"position":"Job Position",
+									"desc":"A little description about this person will show up here."
+								},
+								{
+									"avatarUrl":"http://guten.loc/wp-content/plugins/advanced-gutenberg/assets/blocks/testimonial/avatar-placeholder.png",
+									"name":"Person Name",
+									"position":"Job Position",
+									"desc":"A little description about this person will show up here."
+								}
+							]
+					}
+				}
+			]
 		}
 	]
-} -->
-
-
-<!-- wp:uagb/info-box
-{
-	"source_type":"image","block_id":"{id}",
-	"iconImage":{
-		"id":{image_id},"title":"avatar_up dog","filename":"avatar_up-dog.jpg","url":"{url}",
-		"link":"url","alt":"","author":"{user_id}","description":"","caption":"","name":"avatar_up-dog",
-		"status":"inherit","uploadedTo":52,"date":"2019-01-08T21:47:34.000Z","modified":"2019-01-08T21:47:34.000Z",
-		"menuOrder":0,"mime":"image/jpeg","type":"image","subtype":"jpeg","icon":"/wp-includes/images/media/default.png",
-		"dateFormatted":"January 8, 2019",
-		"nonces":{
-			"update":"f93e1e2aaf","delete":"1e989927b4","edit":"513369b39c"
-		},
-		"editLink":"/wp-admin/post.php?post=53\u0026action=edit","meta":false,
-		"authorName":"admin","uploadedToLink":"/wp-admin/post.php?post=52\u0026action=edit",
-		"uploadedToTitle":"gutenberg shared cover block #196","filesizeInBytes":6442,
-		"filesizeHumanReadable":"6 KB","context":"","height":226,"width":226,"orientation":"landscape",
-		"sizes":{
-			"thumbnail":{
-				"height":150,"width":150,"url":"{url}","orientation":"landscape"},
-			"full":{
-				"url":"{url}","height":226,"width":226,"orientation":"landscape"}
-		},
-		"compat":{
-			"item":"","meta":""
-		}
-	}
-} -->
-
-
-<!-- wp:uagb/restaurant-menu
-{
-	"rest_menu_item_arr":[
-		{
-			"description":"Lorem ipsumdolor sit amet, consectetur adipiscing elit.",
-			"title":"Menu Item 1","price":"$9",
-			"image":{
-				"id":{image_id},"title":"hum_cancer","filename":"hum_cancer.jpg","url":"{url}",
-				"link":"{url}","alt":"","author":"{user_id}","description":"","caption":"",
-				"name":"hum_cancer","status":"inherit","uploadedTo":117,"date":"2019-02-08T21:13:42.000Z",
-				"modified":"2019-02-08T21:13:42.000Z","menuOrder":0,"mime":"image/jpeg",
-				"type":"image","subtype":"jpeg","icon":"/wp-includes/images/media/default.png",
-				"dateFormatted":"February 8, 2019",
-				"nonces":{
-					"update":"0985c15ba5","delete":"f5f807ebc1","edit":"7a873ac814"
-				},
-				"editLink":"/wp-admin/post.php?post={post_id}\u0026action=edit",
-				"meta":false,"authorName":"{username}",
-				"uploadedToLink":"/wp-admin/post.php?post={post_id}\u0026action=edit",
-				"uploadedToTitle":"atomic blocks- testimonial","filesizeInBytes":42379,
-				"filesizeHumanReadable":"41 KB","context":"","height":425,"width":385,
-				"orientation":"portrait",
-				"sizes":{
-					"thumbnail":{
-						"height":150,"width":150,"url":"{url}","orientation":"landscape"
-					},
-					"medium":{
-						"height":300,"width":272,"url":"{url}","orientation":"portrait"
-					},
-					"full":{
-						"url":"{url}","height":425,"width":385,"orientation":"portrait"
-					}
-				},
-				"compat":{
-					"item":"",
-					"meta":""
-				}
-			}
-		},
-		{}
-	],
-	"block_id":"a476991e-ae91-41a8-8eb2-76c151ac9153"
-} -->
-
-
-<!-- wp:uagb/section
-{
-	"block_id":"9d2e6229-896e-4f66-beb9-7e84bd7a015c",
-	"backgroundType":"image",
-	"backgroundImage":{
-		"id":{image_id},
-		"title":"space_8372725172284686336","filename":"space_8372725172284686336.jpg",
-		"url":"{url}","link":"{url}","alt":"","author":"{user_id}","description":"",
-		"caption":"","name":"space_8372725172284686336","status":"inherit","uploadedTo":28,
-		"date":"2018-12-19T23:58:04.000Z","modified":"2018-12-19T23:58:04.000Z",
-		"menuOrder":0,"mime":"image/jpeg","type":"image","subtype":"jpeg","icon":"{url}",
-		"dateFormatted":"December 19, 2018",
-		"nonces":{
-			"update":"32c4fab118",
-			"delete":"1b7ac4c0f1",
-			"edit":"ad330878fd"
-		},
-		"editLink":"/wp-admin/post.php?post={image_id}\u0026action=edit","meta":false,
-		"authorName":"admin","uploadedToLink":"/wp-admin/post.php?post={post_id}\u0026action=edit",
-		"uploadedToTitle":"gutenberg cover block","filesizeInBytes":67020,"filesizeHumanReadable":"65 KB",
-		"context":"","height":900,"width":1350,"orientation":"landscape",
-		"sizes":{
-			"thumbnail":{
-				"height":150,"width":150,"url":"{url}","orientation":"landscape"
-			},
-			"medium":{
-				"height":200,"width":300,"url":"{url}","orientation":"landscape"
-			},
-			"large":{
-				"height":350,"width":525,"url":"{url}","orientation":"landscape"
-			},
-			"full":{
-				"url":"{url}","height":900,"width":1350,"orientation":"landscape"
-			}
-		},
-		"compat":{
-			"item":"","meta":""
-		}
-	}
-} -->
-
-
-<!-- wp:uagb/social-share
-{
-	"block_id":"0fb8dfac-58d8-438a-8b82-bd13050f9043","current_url":"{url}",
-	"social_count":2,
-	"socials":[
-		{
-			"type":"facebook","image_icon":"image","icon":"fab fa-facebook",
-			"image":{
-				"id":{image_id},"title":"avatar_up dog","filename":"avatar_up-dog.jpg",
-				"url":"{url}","link":"{url}","alt":"","author":"{user_id}","description":"",
-				"caption":"","name":"avatar_up-dog","status":"inherit","uploadedTo":{post_id},
-				"date":"2019-01-08T21:47:34.000Z","modified":"2019-01-08T21:47:34.000Z",
-				"menuOrder":0,"mime":"image/jpeg","type":"image","subtype":"jpeg",
-				"icon":"{url}","dateFormatted":"January 8, 2019",
-				"nonces":{
-					"update":"7aa8bb5399","delete":"fe26d91a23","edit":"6991479e9b"
-				},
-				"editLink":"/wp-admin/post.php?post={post_id}\u0026action=edit",
-				"meta":false,"authorName":"admin",
-				"uploadedToLink":"/wp-admin/post.php?post={post_id}\u0026action=edit",
-				"uploadedToTitle":"gutenberg shared cover block #196","filesizeInBytes":6442,
-				"filesizeHumanReadable":"6 KB","context":"","height":226,"width":226,
-				"orientation":"landscape",
-				"sizes":{
-					"thumbnail":{
-						"height":150,"width":150,"url":"{url}","orientation":"landscape"
-					},
-					"full":{
-						"url":"{url}","height":226,"width":226,"orientation":"landscape"
-					}
-				},
-				"compat":{
-					"item":"","meta":""
-				}
-			},
-			"icon_color":"#3a3a3a","icon_hover_color":"","icon_bg_color":"","icon_bg_hover_color":""
-		},
-		{}
-	]
-} -->
-
-
-<!-- wp:uagb/team
-{
-	"block_id":"22753167-04a7-40e2-b325-edc6efa5669a",
-	"image":{
-		"id":{image_id},
-		"title":"avatar_up dog","filename":"avatar_up-dog.jpg","url":"{url}",
-		"link":"{url}","alt":"","author":"{user_id}","description":"","caption":"",
-		"name":"avatar_up-dog","status":"inherit","uploadedTo":{post_id},"date":"2019-01-08T21:47:34.000Z",
-		"modified":"2019-01-08T21:47:34.000Z","menuOrder":0,"mime":"image/jpeg",
-		"type":"image","subtype":"jpeg","icon":"{url}","dateFormatted":"January 8, 2019",
-		"nonces":{
-			"update":"7aa8bb5399","delete":"fe26d91a23","edit":"6991479e9b"
-		},
-		"editLink":"/wp-admin/post.php?post={post_id}\u0026action=edit","meta":false,
-		"authorName":"admin","uploadedToLink":"/wp-admin/post.php?post={post_id}\u0026action=edit",
-		"uploadedToTitle":"gutenberg shared cover block #196","filesizeInBytes":6442,
-		"filesizeHumanReadable":"6 KB","context":"","height":226,"width":226,
-		"orientation":"landscape",
-		"sizes":{
-			"thumbnail":{
-				"height":150,"width":150,"url":"{url}","orientation":"landscape"
-			},
-			"full":{
-				"url":"{url}","height":226,"width":226,"orientation":"landscape"
-			}
-		},
-		"compat":{
-			"item":"","meta":""
-		}
-	}
-} -->
-
-
-<!-- wp:uagb/testimonial
-{
-	"test_item_count":4,
-	"test_block":[
-		{
-			"description":"I have been working with these guys since years now! With lots of hard work and timely communication they made sure they delivered the best to me. Highly recommended!",
-			"name":"John Doe ","company":"Company1",
-			"image":{
-				"id":{image_id},"title":"space_8372725172284686336","filename":"space_8372725172284686336.jpg",
-				"url":"{url}","link":"{url}","alt":"","author":"{user_id}","description":"",
-				"caption":"","name":"space_8372725172284686336","status":"inherit",
-				"uploadedTo":{post_id},"date":"2018-12-19T23:58:04.000Z","modified":"2018-12-19T23:58:04.000Z",
-				"menuOrder":0,"mime":"image/jpeg","type":"image","subtype":"jpeg",
-				"icon":"{url}","dateFormatted":"December 19, 2018","nonces":{
-					"update":"c09376f6bb","delete":"24d2b5d1b1","edit":"8a17485076"
-				},
-				"editLink":"/wp-admin/post.php?post={image_id}\u0026action=edit",
-				"meta":false,"authorName":"{username}","uploadedToLink":"/wp-admin/post.php?post={post_id}\u0026action=edit",
-				"uploadedToTitle":"gutenberg cover block","filesizeInBytes":67020,
-				"filesizeHumanReadable":"65 KB","context":"","height":900,"width":1350,
-				"orientation":"landscape","sizes":{
-					"thumbnail":{
-						"height":150,"width":150,"url":"{url}","orientation":"landscape"
-					},
-					"medium":{
-						"height":200,"width":300,"url":"{url}","orientation":"landscape"
-					},
-					"large":{
-						"height":350,"width":525,"url":"{url}","orientation":"landscape"
-					},
-					"full":{
-						"url":"{url}","height":900,"width":1350,"orientation":"landscape"
-					}
-				},
-				"compat":{
-					"item":"","meta":""
-				}
-			}
-		},
-	],
-	"block_id":"d15abc12-cea8-4fad-a99b-39e073c14aa6"
-} -->
-
-
-<!-- wp:uagb/cf7-styler
-{
-	"block_id":"1e715529-c466-4a53-aac8-369e16fe4cc2",
-	"formId":"202",
-	"isHtml":true,
-	"formJson":{
-		"success":true,
-		"data":{
-			"html":"\u003cdiv role=\u0022form\u0022 class=\u0022wpcf7\u0022 id=\u0022wpcf7-f202-o1\u0022 lang=\u0022en-US\u0022 dir=\u0022ltr\u0022\u003e\n\u003cdiv class=\u0022screen-reader-response\u0022\u003e\u003c/div\u003e\n\u003cform action=\u0022/wp-admin/admin-ajax.php#wpcf7-f202-o1\u0022 method=\u0022post\u0022 class=\u0022wpcf7-form\u0022 novalidate=\u0022novalidate\u0022\u003e\n\u003cdiv style=\u0022display: none;\u0022\u003e\n\u003cinput type=\u0022hidden\u0022 name=\u0022_wpcf7\u0022 value=\u0022202\u0022 /\u003e\n\u003cinput type=\u0022hidden\u0022 name=\u0022_wpcf7_version\u0022 value=\u00225.1.1\u0022 /\u003e\n\u003cinput type=\u0022hidden\u0022 name=\u0022_wpcf7_locale\u0022 value=\u0022en_US\u0022 /\u003e\n\u003cinput type=\u0022hidden\u0022 name=\u0022_wpcf7_unit_tag\u0022 value=\u0022wpcf7-f202-o1\u0022 /\u003e\n\u003cinput type=\u0022hidden\u0022 name=\u0022_wpcf7_container_post\u0022 value=\u00220\u0022 /\u003e\n\u003cinput type=\u0022hidden\u0022 name=\u0022g-recaptcha-response\u0022 value=\u0022\u0022 /\u003e\n\u003c/div\u003e\n\u003cp\u003e\u003clabel\u003e Your Name (required)\u003cbr /\u003e\n    \u003cspan class=\u0022wpcf7-form-control-wrap your-name\u0022\u003e\u003cinput type=\u0022text\u0022 name=\u0022your-name\u0022 value=\u0022\u0022 size=\u002240\u0022 class=\u0022wpcf7-form-control wpcf7-text wpcf7-validates-as-required\u0022 aria-required=\u0022true\u0022 aria-invalid=\u0022false\u0022 /\u003e\u003c/span\u003e \u003c/label\u003e\u003c/p\u003e\n\u003cp\u003e\u003clabel\u003e Your Email (required)\u003cbr /\u003e\n    \u003cspan class=\u0022wpcf7-form-control-wrap your-email\u0022\u003e\u003cinput type=\u0022email\u0022 name=\u0022your-email\u0022 value=\u0022\u0022 size=\u002240\u0022 class=\u0022wpcf7-form-control wpcf7-text wpcf7-email wpcf7-validates-as-required wpcf7-validates-as-email\u0022 aria-required=\u0022true\u0022 aria-invalid=\u0022false\u0022 /\u003e\u003c/span\u003e \u003c/label\u003e\u003c/p\u003e\n\u003cp\u003e\u003clabel\u003e Subject\u003cbr /\u003e\n    \u003cspan class=\u0022wpcf7-form-control-wrap your-subject\u0022\u003e\u003cinput type=\u0022text\u0022 name=\u0022your-subject\u0022 value=\u0022\u0022 size=\u002240\u0022 class=\u0022wpcf7-form-control wpcf7-text\u0022 aria-invalid=\u0022false\u0022 /\u003e\u003c/span\u003e \u003c/label\u003e\u003c/p\u003e\n\u003cp\u003e\u003clabel\u003e Your Message\u003cbr /\u003e\n    \u003cspan class=\u0022wpcf7-form-control-wrap your-message\u0022\u003e\u003ctextarea name=\u0022your-message\u0022 cols=\u002240\u0022 rows=\u002210\u0022 class=\u0022wpcf7-form-control wpcf7-textarea\u0022 aria-invalid=\u0022false\u0022\u003e\u003c/textarea\u003e\u003c/span\u003e \u003c/label\u003e\u003c/p\u003e\n\u003cp\u003e\u003cinput type=\u0022submit\u0022 value=\u0022Send\u0022 class=\u0022wpcf7-form-control wpcf7-submit\u0022 /\u003e\u003c/p\u003e\n\u003cdiv class=\u0022wpcf7-response-output wpcf7-display-none\u0022\u003e\u003c/div\u003e\u003c/form\u003e\u003c/div\u003e"
-		}
-	}
-} /-->
-
-
-<!-- wp:uagb/gf-styler
-{
-	"block_id":"d2e971a2-8e1f-4107-9c42-fce61133b632",
-	"formId":"1",
-	"isHtml":true,
-	"formJson":{
-		"success":true,
-		"data":{
-			"html":"\r\n\n\
-				\u003cdiv class='gf_browser_chrome gform_wrapper' id='gform_wrapper_1' \u003e\n\
-					\u003ca id='gf_1' class='gform_anchor' \u003e\n\
-					\u003c/a\u003e\n\
-					\u003cform method='post' enctype='multipart/form-data' target='gform_ajax_frame_1' id='gform_1'  action='/wp-admin/admin-ajax.php#gf_1'\u003e\n\
-					\r\n\n\
-					\u003cdiv class='gform_heading'\u003e\r\n\n\
-						\u003ch3 class='gform_title'\u003eform\u003c/h3\u003e\n\
-						\r\n\n\
-						\u003cspan class='gform_description'\u003edescription\u003c/span\u003e\r\n                        \u003c/div\u003e\r\n                        \u003cdiv class='gform_body'\u003e\u003cul id='gform_fields_1' class='gform_fields top_label form_sublabel_below description_below'\u003e\u003cli id='field_1_1' class='gfield field_sublabel_below field_description_below' \u003e\u003clabel class='gfield_label' for='input_1_1' \u003eField\u003c/label\u003e\u003cdiv class='ginput_container'\u003e\u003cinput name='input_1' id='input_1_1' type='text' value='' class='medium'  tabindex='1'   /\u003e\u003c/div\u003e\u003cdiv class='gfield_description'\u003edesc\u003c/div\u003e\u003c/li\u003e\r\n                            \u003c/ul\u003e\u003c/div\u003e\r\n        \u003cdiv class='gform_footer top_label'\u003e \u003cinput type='submit' id='gform_submit_button_1' class='gform_button button' value='Submit' tabindex='2' onclick='if(window[\u0022gf_submitting_1\u0022]){return false;}  window[\u0022gf_submitting_1\u0022]=true;  ' /\u003e \u003cinput type='hidden' name='gform_ajax' value='form_id=1\u0026amp;title=1\u0026amp;description=1\u0026amp;tabindex=1' /\u003e\r\n            \u003cinput type='hidden' class='gform_hidden' name='is_submit_1' value='1' /\u003e\r\n            \u003cinput type='hidden' class='gform_hidden' name='gform_submit' value='1' /\u003e\r\n            \r\n            \u003cinput type='hidden' class='gform_hidden' name='gform_unique_id' value='' /\u003e\r\n            \u003cinput type='hidden' class='gform_hidden' name='state_1' value='WyJbXSIsIjAwOTg2OGNlODgyOGI1NDQwZGNjZjI1NzhkYTNiZGQ2Il0=' /\u003e\r\n            \u003cinput type='hidden' class='gform_hidden' name='gform_target_page_number_1' id='gform_target_page_number_1' value='0' /\u003e\r\n            \u003cinput type='hidden' class='gform_hidden' name='gform_source_page_number_1' id='gform_source_page_number_1' value='1' /\u003e\r\n            \u003cinput type='hidden' name='gform_field_values' value='' /\u003e\r\n   \r\n        \u003c/div\u003e\r\n                        \u003c/form\u003e\r\n                        \u003c/div\u003e\r\n                \u003ciframe style='display:none;width:0px;height:0px;' src='about:blank' name='gform_ajax_frame_1' id='gform_ajax_frame_1'\u003e\u003c/iframe\u003e\r\n                \u003cscript type='text/javascript'\u003ejQuery(document).ready(function($){gformInitSpinner( 1, 'http://guten.loc/wp-content/plugins/gravityforms/images/spinner.gif' );jQuery('#gform_ajax_frame_1').load( function(){var contents = jQuery(this).contents().find('*').html();var is_postback = contents.indexOf('GF_AJAX_POSTBACK') \u003e= 0;if(!is_postback){return;}var form_content = jQuery(this).contents().find('#gform_wrapper_1');var is_confirmation = jQuery(this).contents().find('#gform_confirmation_wrapper_1').length \u003e 0;var is_redirect = contents.indexOf('gformRedirect(){') \u003e= 0;var is_form = form_content.length \u003e 0 \u0026\u0026 ! is_redirect \u0026\u0026 ! is_confirmation;if(is_form){jQuery('#gform_wrapper_1').html(form_content.html());setTimeout( function() { /* delay the scroll by 50 milliseconds to fix a bug in chrome */ jQuery(document).scrollTop(jQuery('#gform_wrapper_1').offset().top); }, 50 );if(window['gformInitDatepicker']) {gformInitDatepicker();}if(window['gformInitPriceFields']) {gformInitPriceFields();}var current_page = jQuery('#gform_source_page_number_1').val();gformInitSpinner( 1, 'http://guten.loc/wp-content/plugins/gravityforms/images/spinner.gif' );jQuery(document).trigger('gform_page_loaded', [1, current_page]);window['gf_submitting_1'] = false;}else if(!is_redirect){var confirmation_content = jQuery(this).contents().find('#gforms_confirmation_message_1').html();if(!confirmation_content){confirmation_content = contents;}setTimeout(function(){jQuery('#gform_wrapper_1').replaceWith('\u003c' + 'div id=\\'gforms_confirmation_message_1\\' class=\\'gform_confirmation_message_1 gforms_confirmation_message\\'' + '\u003e' + confirmation_content + '\u003c' + '/div' + '\u003e');jQuery(document).scrollTop(jQuery('#gforms_confirmation_message_1').offset().top);jQuery(document).trigger('gform_confirmation_loaded', [1]);window['gf_submitting_1'] = false;}, 50);}else{jQuery('#gform_1').append(contents);if(window['gformRedirect']) {gformRedirect();}}jQuery(document).trigger('gform_post_render', [1, current_page]);} );} );\u003c/script\u003e\u003cscript type='text/javascript'\u003e if(typeof gf_global == 'undefined') var gf_global = {\u0022gf_currency_config\u0022:{\u0022name\u0022:\u0022U.S. Dollar\u0022,\u0022symbol_left\u0022:\u0022$\u0022,\u0022symbol_right\u0022:\u0022\u0022,\u0022symbol_padding\u0022:\u0022\u0022,\u0022thousand_separator\u0022:\u0022,\u0022,\u0022decimal_separator\u0022:\u0022.\u0022,\u0022decimals\u0022:2},\u0022base_url\u0022:\u0022http:\\/\\/guten.loc\\/wp-content\\/plugins\\/gravityforms\u0022,\u0022number_formats\u0022:[],\u0022spinnerUrl\u0022:\u0022http:\\/\\/guten.loc\\/wp-content\\/plugins\\/gravityforms\\/images\\/spinner.gif\u0022};jQuery(document).bind('gform_post_render', function(event, formId, currentPage){if(formId == 1) {} } );jQuery(document).bind('gform_post_conditional_logic', function(event, formId, fields, isInit){} );\u003c/script\u003e\u003cscript type='text/javascript'\u003e jQuery(document).ready(function(){jQuery(document).trigger('gform_post_render', [1, 1]) } ); \u003c/script\u003e"
-		}
-	}
-} /-->
-
-#################################################
-
-Properties for: Kadence Blocks v1.5.3
-
-<!-- wp:kadence/rowlayout
-{
-	"uniqueID":"_04222e-ed",
-	"columns":3,
-	"colLayout":"center-half",
-	"bgImg":"http://guten.loc/wp-content/uploads/2018/12/space_14079651_1766309910321290_536388646130492102_n.jpg",
-	"bgImgID":36
-	"overlayBgImg":"http://guten.loc/wp-content/uploads/2018/12/space_14079651_1766309910321290_536388646130492102_n.jpg",
-	"overlayBgImgID":35
-} -->
-
-
-<!-- wp:kadence/testimonials
-{
-	"uniqueID":"_cd0c78-2e",
-	"style":"inlineimage",
-	"testimonials":[
-		{
-			"url":"http://guten.loc/wp-content/uploads/2019/01/avatar_up-dog.jpg",
-			"id":53,
-			"alt":"",
-			"width":"",
-			"height":"",
-			"maxWidth":"",
-			"subtype":"jpeg",
-			"media":"image",
-			"icon":"fas_quote-left",
-			"isize":50,
-			"istroke":2,
-			"ititle":"",
-			"color":"#555555",
-			"title":"",
-			"content":"",
-			"name":"",
-			"occupation":"",
-			"rating":5,
-			"sizes":{
-				"thumbnail":{
-					"height":150,
-					"width":150,
-					"url":"http://guten.loc/wp-content/uploads/2019/01/avatar_up-dog-150x150.jpg",
-					"orientation":"landscape"
-				},
-				"full":{
-					"url":"http://guten.loc/wp-content/uploads/2019/01/avatar_up-dog.jpg",
-					"height":226,
-					"width":226,
-					"orientation":"landscape"
-				}
-			}
-		}
-	]
-} -->
+}

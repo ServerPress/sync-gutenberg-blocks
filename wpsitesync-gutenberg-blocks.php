@@ -51,17 +51,17 @@ if (!class_exists('WPSiteSync_Gutenberg_Blocks', FALSE)) {
 
 			// properties for: Premium Blocks for Gutenberg v1.6.2
 		//	wp:premium/accordion - no ids in json
-			'wp:premium/banner' =>						'imageID',
+			'wp:premium/banner' =>						'imageID',	#11
 		//	wp:premium/button - no ids in json
-			'wp:premium/container' =>					'imageID',
-			'wp:premium/countup' =>						'imageID|backgroundImageID',
-			'wp:premium/dheading-block' =>				'imageID',
-			'wp:premium/icon' =>						'imageID',
-			'wp:premium/icon-box' =>					'imageID|iconImgId',
-			'wp:premium/maps' =>						'markerIconId',
+			'wp:premium/container' =>					'imageID', #17 "Section"
+			'wp:premium/countup' =>						'imageID|backgroundImageID',	#10
+			'wp:premium/dheading-block' =>				'imageID',	#13
+			'wp:premium/icon' =>						'imageID',	#14
+			'wp:premium/icon-box' =>					'imageID|iconImgId',	#15
+			'wp:premium/maps' =>						'markerIconId',	#16
 		//	wp:premium/pricing-table - no ids in json
 			'wp:premium/testimonial' =>					'imageID|authorImgId',
-			'wp:premium/video-box' =>					'overlayImgID',
+			'wp:premium/video-box' =>					'overlayImgID',	#12
 
 			// properties for: Ultimate Addons for Gutenberg v1.13.1
 		//	wp:uagb/advanced-heading - no ids in json
@@ -88,19 +88,39 @@ if (!class_exists('WPSiteSync_Gutenberg_Blocks', FALSE)) {
 			'wp:uagb/testimonial' =>					'[test_block.image.id|[test_block.image.author:u|[test_block.image.uploadedTo:p|[test_block.image.editLink:l|[test_block.image.uploadedToLink:l', #28
 
 			// properties for: Kadence Blocks v1.5.3
-		//	!wp:kadence/spacer - no ids in json
-		//	!wp:kadence/advancedbtn - no ids in json
+		//	wp:kadence/spacer - no ids in json
+		//	wp:kadence/advancedbtn - no ids in json
 			'wp:kadence/rowlayout' =>					'bgImgID|overlayBgImgID', #29
 		//	wp:kadence/column - no ids in json
-		//	!wp:kadence/icon - no ids in json							
-		//	!wp:kadence/advancedheading - no ids in json
-		//	!wp:kadence/tabs - no ids in json
+		//	wp:kadence/icon - no ids in json							
+		//	wp:kadence/advancedheading - no ids in json
+		//	wp:kadence/tabs - no ids in json
 		//	wp:kadence/tab - no ids in json
-		//	!wp:kadence/infobox - no ids in json
-		//	!wp:kadence/accordion - no ids in json
+		//	wp:kadence/infobox - no ids in json
+		//	wp:kadence/accordion - no ids in json
 		//	wp:kadence/pane - no ids in json
-		//	!wp:kadence/iconlist - no ids in json
+		//	wp:kadence/iconlist - no ids in json
 			'wp:kadence/testimonials' =>				'[testimonials.id',	#30
+
+			// properties for: Advanced Gutenberg v1.10.10
+		//	wp:advgb/accordion
+		//	wp:advgb/button "Advanced Button"
+			'wp:advgb/image' =>							'imageID', #31 "Advanced Image"
+		//	wp:advgb/list "Advanced List"
+		//	wp:advgb/table "Advanced Table"
+			'wp:advgb/video' =>							'videoID|posterID', #32 "Advanced Video"
+		//	wp:advgb/contact-form ??
+		//	wp:advgb/container
+		//	wp:advgb/count-up
+			'wp:advgb/images-slider' =>					'[images.id', #33
+			'wp:advgb/map' =>							'markerIconID', #35
+		//	wp:advgb/newsletter
+		//	wp:advgb/recent-posts
+			'wp:advgb/social-links' =>					'[items.iconID', #34
+		//	wp:advgb/summary
+		//	wp:advgb/tabs
+			'wp:advgb/testimonial' =>					'avatarID|avatarID2|avatarID3|avatarID4|[items.avatarID', #35
+		//	wp:advgb/woo-products
 		);
 
 		const PROPTYPE_IMAGE = 1;					// :i

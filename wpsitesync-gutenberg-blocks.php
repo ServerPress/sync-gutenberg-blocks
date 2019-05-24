@@ -121,9 +121,62 @@ if (!class_exists('WPSiteSync_Gutenberg_Blocks', FALSE)) {
 		//	wp:advgb/tabs
 			'wp:advgb/testimonial' =>					'avatarID|avatarID2|avatarID3|avatarID4|[items.avatarID', #35
 		//	wp:advgb/woo-products
+
+			// properties for: Stackable Gutenberg Blocks v1.15.3
+		//	wp:ugb/accordion - no ids in json
+			'wp:ugb/blockquote' =>						'backgroundImageID',	#39
+		//	wp:posts
+		//	wp:ugb/button
+			'wp:ugb/cta' =>								'backgroundImageID',	#40
+		//	wp:ugb/card ??
+			'wp:ugb/container' =>						'backgroundImageID',	#41
+			'wp:ugb/count-up' =>						'backgroundImageID',	#42 // ??
+		//	wp:ugb/divider
+		//	wp:ugb/expand
+			'wp:ugb/feature-grid' =>					'imageID1|imageID2|imageID3',	#43
+			'wp:ugb/feature' =>							'imageID|backgroundImageID',	#44
+		//	wp:ugb/ghost-button
+			'wp:ugb/header' =>							'backgroundImageID',	#45
+		//	wp:ugb/icon-list
+		//	wp:ugb/image-box ??
+		//	wp:ugb/notification
+		//	wp:ugb/number-box // > 3 numbers...
+		//	wp:ugb/pricing-box
+		//	wp:ugb/pullquote
+		//	wp:ugb/separator
+		//	wp:ugb/spacer
+			'wp:ugb/team-member' =>						'mediaID1|mediaID2|mediaID3|mediaID|mediaIDTwo|mediaIDThree', #46 // > 3 columns
+			'wp:ugb/testimonial' =>						'mediaID1|mediaID2|mediaID3|mediaID|mediaIDTwo|mediaIDThree', #47 // > 3 testimonials
+			'wp:ugb/video-popup' =>						'videoID|backgroundImageID|mediaID',	#48
+
+			// properties for: Otter Blocks v1.2.2
+		//	wp:themeisle-blocks/about-author
+		//	wp:themeisle-blocks/accordion-area
+		//	wp:themeisle-blocks/accordion-block
+			'wp:themeisle-blocks/advanced-column' =>	'backgroundImageID',	#49
+			'wp:themeisle-blocks/advanced-columns' =>	'backgroundImageID|backgroundOverlayImageID', #50
+		//	wp:themeisle-blocks/advanced-heading
+		//	wp:themeisle-blocks/button-group
+		//	wp:themeisle-blocks/chart-pie
+		//	wp:themeisle-blocks/font-awesome-icons
+		//	wp:themeisle-blocks/notice
+		//	wp:themeisle-blocks/plugin-cards
+		//	wp:themeisle-blocks/google-map
+		//	wp:themeisle-blocks/posts-grid
+		//	wp:themeisle-blocks/pricing
+		//	wp:themeisle-blocks/pricing-block
+			'wp:themeisle-blocks/pricing-table' =>		'backgroundImageID', #51
+		//	wp:themeisle-blocks/service
+		//	wp:themeisle-blocks/service-block
+			'wp:themeisle-blocks/services' =>			'backgroundImageID', #52
+		//	wp:themeisle-blocks/sharing-icons
+		//	wp:themeisle-blocks/testimonials
+		//	wp:themeisle-blocks/testimonials-block
+			'wp:themeisle-blocks/testimonials-area' =>	'backgroundImageID', #53
+		//	wp:themeisle-blocks/tweetable
 		);
 
-		const PROPTYPE_IMAGE = 1;					// :i
+		const PROPTYPE_IMAGE = 1;					// :i (default)
 		const PROPTYPE_POST = 2;					// :p
 		const PROPTYPE_USER = 3;					// :u
 		const PROPTYPE_LINK = 4;					// :l
@@ -284,12 +337,20 @@ if ($this->_prop_array) {
 	$prop_name = $this->_prop_list[0] . '[' . $ndx . ']->';
 }
 			$idx2 = $idx + 1;
+SyncDebug::log(__METHOD__.'():' . __LINE__ . ' idx=' . $idx . ' idx2=' . $idx2 . ' ' . (NULL !== $this->_prop_list ? implode('|', $this->_prop_list) : ''));
 
 			if (NULL === $this->_prop_name) {									// nested reference
-$prop_name .= $this->_prop_list[$idx] . '->' . $this->_prop_list[$idx2];
+				$prop_name .= $this->_prop_list[$idx];
+				if ($idx2 < count($this->_prop_list))
+					$prop_name .= '->' . $this->_prop_list[$idx2];
 SyncDebug::log(__METHOD__.'():' . __LINE__ . ' getting property: ' . $prop_name);
-				if (isset($obj->{$this->_prop_list[$idx]}->{$this->_prop_list[$idx2]}))
-					$val = $obj->{$this->_prop_list[$idx]}->{$this->_prop_list[$idx2]};
+				if ($idx2 < count($this->_prop_list)) {
+					if (isset($obj->{$this->_prop_list[$idx]}->{$this->_prop_list[$idx2]}))
+						$val = $obj->{$this->_prop_list[$idx]}->{$this->_prop_list[$idx2]};
+				} else {
+					if (isset($obj->{$this->_prop_list[$idx]}))
+						$val = $obj->{$this->_prop_list[$idx]};
+				}
 			} else {															// single reference
 $prop_name .= $this->_prop_name;
 SyncDebug::log(__METHOD__.'():' . __LINE__ . ' getting property: ' . $prop_name);
@@ -317,19 +378,28 @@ if ($this->_prop_array) {
 			$idx2 = $idx + 1;
 
 			if (NULL === $this->_prop_name) {									// nexted reference
-$prop_name .= $this->_prop_list[$idx] . '->' . $this->_prop_list[$idx2];
+				$prop_name .= $this->_prop_list[$idx];
+				if ($idx2 < count($this->_prop_list))
+					$prop_name .= '->' . $this->_prop_list[$idx2];
 SyncDebug::log(__METHOD__.'():' . __LINE__ . ' setting property: ' . $prop_name);
-				if (isset($obj->{$this->_prop_list[$idx]}->{$this->_prop_list[$idx2]}))
-					$obj->{$this->_prop_list[$idx]}->{$this->_prop_list[$idx2]} = $val;
-				else
-					throw new Exception('Property "' . $prop_name . '" does not exist in object');
+				if ($idx2 < count($this->_prop_list)) {
+					if (isset($obj->{$this->_prop_list[$idx]}->{$this->_prop_list[$idx2]}))
+						$obj->{$this->_prop_list[$idx]}->{$this->_prop_list[$idx2]} = $val;
+					else
+SyncDebug::log(__METHOD__.'():' . __LINE__ . ' Property "' . $prop_name . '" does not exist in object');
+				} else {
+					if (isset($obj->{$this->_prop_list[$idx]}))
+						$obj->{$this->_prop_list[$idx]} = $val;
+					else
+SyncDebug::log(__METHOD__.'():' . __LINE__ . ' Property "' . $prop_name . '" does not exist in object');
+				}
 			} else {															// single reference
 $prop_name .= $this->_prop_name;
 SyncDebug::log(__METHOD__.'():' . __LINE__ . ' setting property: ' . $prop_name);
 				if (isset($obj->{$this->_prop_name}))
 					$obj->{$this->_prop_name} = $val;
 				else
-					throw new Exception('Property "' . $prop_name . '" does not exist in object');
+SyncDebug::log(__METHOD__.'():' . __LINE__ . ' Property "' . $prop_name . '" does not exist in object');
 			}
 		}
 
@@ -407,7 +477,7 @@ SyncDebug::log(__METHOD__.'():' . __LINE__ . ' checking array: "' . $this->_prop
 								$idx = 0;
 								foreach ($obj->{$this->_prop_list[0]} as $entry) {
 									$ref_id = abs($this->_get_val($entry, $idx));
-SyncDebug::log(__METHOD__.'():' . __LINE__ . ' source ref=' . var_export($source_ref_id, TRUE));
+SyncDebug::log(__METHOD__.'():' . __LINE__ . ' source ref=' . var_export($ref_id, TRUE));
 									if (0 !== $ref_id)
 										$ref_ids[] = $ref_id;
 									++$idx;
@@ -530,7 +600,7 @@ SyncDebug::log(__METHOD__.'():' . __LINE__ . ' updating Source ID ' . $source_re
 
 					if ($updated) {
 						// one or more properties were updated with their Target post ID values- update the content
-						$new_obj_data = json_encode($obj);
+						$new_obj_data = json_encode($obj, JSON_UNESCAPED_SLASHES);
 						$content = substr($content, 0, $start) . $new_obj_data . substr($content, $end + 1);
 SyncDebug::log(__METHOD__.'():' . __LINE__ . ' original: ' . $json . PHP_EOL . ' updated: ' . $new_obj_data);
 					}

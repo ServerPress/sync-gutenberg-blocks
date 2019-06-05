@@ -124,19 +124,19 @@ if (!class_exists('WPSiteSync_Gutenberg_Blocks', FALSE)) {
 
 			// properties for: Stackable Gutenberg Blocks v1.15.3
 		//	wp:ugb/accordion - no ids in json
-			'wp:ugb/blockquote' =>						'backgroundImageID',	#39
+			'wp:ugb/blockquote' =>						'backgroundImageID',	#41
 		//	wp:posts
 		//	wp:ugb/button
-			'wp:ugb/cta' =>								'backgroundImageID',	#40
+			'wp:ugb/cta' =>								'backgroundImageID',	#42
 		//	wp:ugb/card ??
-			'wp:ugb/container' =>						'backgroundImageID',	#41
-			'wp:ugb/count-up' =>						'backgroundImageID',	#42 // ??
+			'wp:ugb/container' =>						'backgroundImageID',	#43
+			'wp:ugb/count-up' =>						'backgroundImageID',	#44
 		//	wp:ugb/divider
 		//	wp:ugb/expand
-			'wp:ugb/feature-grid' =>					'imageID1|imageID2|imageID3',	#43
-			'wp:ugb/feature' =>							'imageID|backgroundImageID',	#44
+			'wp:ugb/feature-grid' =>					'imageID1|imageID2|imageID3',	#46
+			'wp:ugb/feature' =>							'imageID|backgroundImageID',	#45
 		//	wp:ugb/ghost-button
-			'wp:ugb/header' =>							'backgroundImageID',	#45
+			'wp:ugb/header' =>							'backgroundImageID',	#47
 		//	wp:ugb/icon-list
 		//	wp:ugb/image-box ??
 		//	wp:ugb/notification
@@ -145,16 +145,16 @@ if (!class_exists('WPSiteSync_Gutenberg_Blocks', FALSE)) {
 		//	wp:ugb/pullquote
 		//	wp:ugb/separator
 		//	wp:ugb/spacer
-			'wp:ugb/team-member' =>						'mediaID1|mediaID2|mediaID3|mediaID|mediaIDTwo|mediaIDThree', #46 // > 3 columns
-			'wp:ugb/testimonial' =>						'mediaID1|mediaID2|mediaID3|mediaID|mediaIDTwo|mediaIDThree', #47 // > 3 testimonials
-			'wp:ugb/video-popup' =>						'videoID|backgroundImageID|mediaID',	#48
+			'wp:ugb/team-member' =>						'mediaID1|mediaID2|mediaID3|mediaID|mediaIDTwo|mediaIDThree', #48 // > 3 columns
+			'wp:ugb/testimonial' =>						'mediaID1|mediaID2|mediaID3|mediaID|mediaIDTwo|mediaIDThree', #49 // > 3 testimonials
+			'wp:ugb/video-popup' =>						'videoID|backgroundImageID|mediaID',	#50
 
 			// properties for: Otter Blocks v1.2.2
 		//	wp:themeisle-blocks/about-author
 		//	wp:themeisle-blocks/accordion-area
 		//	wp:themeisle-blocks/accordion-block
-			'wp:themeisle-blocks/advanced-column' =>	'backgroundImageID',	#49
-			'wp:themeisle-blocks/advanced-columns' =>	'backgroundImageID|backgroundOverlayImageID', #50
+			'wp:themeisle-blocks/advanced-column' =>	'backgroundImageID',	#39
+			'wp:themeisle-blocks/advanced-columns' =>	'backgroundImageID|backgroundOverlayImageID', #39
 		//	wp:themeisle-blocks/advanced-heading
 		//	wp:themeisle-blocks/button-group
 		//	wp:themeisle-blocks/chart-pie
@@ -206,14 +206,18 @@ if (!class_exists('WPSiteSync_Gutenberg_Blocks', FALSE)) {
 			return self::$_instance;
 		}
 
+		/**
+		 * Initializes the plugin, hooking into the sync filters to allow processing of Gutenberg Blocks
+		 */
 		public function init()
 		{
 			add_filter('spectrom_sync_active_extensions', array($this, 'filter_active_extensions'), 10, 2);
 
-#			if (!WPSiteSyncContent::get_instance()->get_license()->check_license('sync_gutenbergblocks', self::PLUGIN_KEY, self::PLUGIN_NAME)) {
-#SyncDebug::log(__METHOD__ . '() no license');
-#				return;
-#			}
+			if (!WPSiteSyncContent::get_instance()->get_license()->check_license('sync_gutenbergblocks', self::PLUGIN_KEY, self::PLUGIN_NAME)) {
+SyncDebug::log(__METHOD__.'() no license');
+				return;
+			}
+SyncDebug::log(__METHOD__.'():' . __LINE__ . ' license accepted');
 
 			add_filter('spectrom_sync_allowed_post_types', array($this, 'allow_custom_post_types'));
 			add_action('spectrom_sync_parse_gutenberg_block', array($this, 'parse_gutenberg_block'), 10, 6);
@@ -232,7 +236,7 @@ if (!class_exists('WPSiteSync_Gutenberg_Blocks', FALSE)) {
 		public function load_class($name, $create = FALSE)
 		{
 			$file = __DIR__ . '/classes/' . strtolower($name) . '.php';
-SyncDebug::log(__METHOD__.'():' . __LINE__ . ' loading class "' . $file . '"');
+//SyncDebug::log(__METHOD__.'():' . __LINE__ . ' loading class "' . $file . '"');
 			if (file_exists($file))
 				require_once($file);
 			if ($create) {
@@ -243,8 +247,8 @@ SyncDebug::log(__METHOD__.'():' . __LINE__ . ' loading class "' . $file . '"');
 		}
 
 		/**
-		 * Adds all custom post types to the list of `spectrom_sync_allowed_post_types`
-		 * @param  array $post_types The post types to allow
+		 * Adds all Gutenberg related custom post types to the list of `spectrom_sync_allowed_post_types`
+		 * @param array $post_types The post types to allow
 		 * @return array
 		 */
 		public function allow_custom_post_types($post_types)
@@ -278,7 +282,7 @@ SyncDebug::log(__METHOD__.'():' . __LINE__ . ' loading class "' . $file . '"');
 		}
 
 		/**
-		 * Parses the property, setting the type, name and list from the name
+		 * Parses the property, setting the type, name and list from the property name
 		 * @param string $prop The property name to be parsed
 		 */
 		private function _parse_property($prop)
@@ -310,15 +314,15 @@ SyncDebug::log(__METHOD__.'():' . __LINE__ . ' loading class "' . $file . '"');
 				// right now, it only handles one level of property nesting
 				$this->_prop_name = NULL;
 				$this->_prop_list = explode('.', $prop);
-if (count($this->_prop_list) > 3)
-SyncDebug::log(__METHOD__.'():' . __LINE__ . ' ERROR: more than three properties: ' . implode('->', $this->_prop_list));
+//if (count($this->_prop_list) > 3)
+//SyncDebug::log(__METHOD__.'():' . __LINE__ . ' ERROR: more than three properties: ' . implode('->', $this->_prop_list));
 			} else {
 				$this->_prop_name = $prop;
 				$this->_prop_list = NULL;
 			}
-SyncDebug::log(__METHOD__.'():' . __LINE__ . ' type=' . $this->_prop_type . ' arr=' . ($this->_prop_array ? 'T' : 'F') .
-				' name=' . (NULL === $this->_prop_name ? '(NULL)' : $this->_prop_name) .
-				' list=' . (NULL === $this->_prop_list ? '(NULL)' : implode('->', $this->_prop_list)));
+//SyncDebug::log(__METHOD__.'():' . __LINE__ . ' type=' . $this->_prop_type . ' arr=' . ($this->_prop_array ? 'T' : 'F') .
+//				' name=' . (NULL === $this->_prop_name ? '(NULL)' : $this->_prop_name) .
+//				' list=' . (NULL === $this->_prop_list ? '(NULL)' : implode('->', $this->_prop_list)));
 		}
 
 		/**
@@ -332,18 +336,18 @@ SyncDebug::log(__METHOD__.'():' . __LINE__ . ' type=' . $this->_prop_type . ' ar
 			$val = 0;
 			$idx = 0;						// this is the index within the _prop_list array to use for property references
 			$prop_name = '';
-if ($this->_prop_array) {
-	$idx = 1;
-	$prop_name = $this->_prop_list[0] . '[' . $ndx . ']->';
-}
+			if ($this->_prop_array) {
+				$idx = 1;
+				$prop_name = $this->_prop_list[0] . '[' . $ndx . ']->';
+			}
 			$idx2 = $idx + 1;
-SyncDebug::log(__METHOD__.'():' . __LINE__ . ' idx=' . $idx . ' idx2=' . $idx2 . ' ' . (NULL !== $this->_prop_list ? implode('|', $this->_prop_list) : ''));
+//SyncDebug::log(__METHOD__.'():' . __LINE__ . ' idx=' . $idx . ' idx2=' . $idx2 . ' ' . (NULL !== $this->_prop_list ? implode('|', $this->_prop_list) : ''));
 
 			if (NULL === $this->_prop_name) {									// nested reference
 				$prop_name .= $this->_prop_list[$idx];
 				if ($idx2 < count($this->_prop_list))
 					$prop_name .= '->' . $this->_prop_list[$idx2];
-SyncDebug::log(__METHOD__.'():' . __LINE__ . ' getting property: ' . $prop_name);
+//SyncDebug::log(__METHOD__.'():' . __LINE__ . ' getting property: ' . $prop_name);
 				if ($idx2 < count($this->_prop_list)) {
 					if (isset($obj->{$this->_prop_list[$idx]}->{$this->_prop_list[$idx2]}))
 						$val = $obj->{$this->_prop_list[$idx]}->{$this->_prop_list[$idx2]};
@@ -352,8 +356,8 @@ SyncDebug::log(__METHOD__.'():' . __LINE__ . ' getting property: ' . $prop_name)
 						$val = $obj->{$this->_prop_list[$idx]};
 				}
 			} else {															// single reference
-$prop_name .= $this->_prop_name;
-SyncDebug::log(__METHOD__.'():' . __LINE__ . ' getting property: ' . $prop_name);
+				$prop_name .= $this->_prop_name;
+//SyncDebug::log(__METHOD__.'():' . __LINE__ . ' getting property: ' . $prop_name);
 				// property denotes a single reference
 				if (isset($obj->{$this->_prop_name}))
 					$val = $obj->{$this->_prop_name};
@@ -371,35 +375,35 @@ SyncDebug::log(__METHOD__.'():' . __LINE__ . ' getting property: ' . $prop_name)
 		{
 			$idx = 0;
 			$prop_name = '';
-if ($this->_prop_array) {
-	$idx = 1;
-	$prop_name = $this->_prop_list[0] . '[' . $ndx . ']->';
-}
+			if ($this->_prop_array) {
+				$idx = 1;
+				$prop_name = $this->_prop_list[0] . '[' . $ndx . ']->';
+			}
 			$idx2 = $idx + 1;
 
 			if (NULL === $this->_prop_name) {									// nexted reference
 				$prop_name .= $this->_prop_list[$idx];
 				if ($idx2 < count($this->_prop_list))
 					$prop_name .= '->' . $this->_prop_list[$idx2];
-SyncDebug::log(__METHOD__.'():' . __LINE__ . ' setting property: ' . $prop_name);
+//SyncDebug::log(__METHOD__.'():' . __LINE__ . ' setting property: ' . $prop_name);
 				if ($idx2 < count($this->_prop_list)) {
 					if (isset($obj->{$this->_prop_list[$idx]}->{$this->_prop_list[$idx2]}))
 						$obj->{$this->_prop_list[$idx]}->{$this->_prop_list[$idx2]} = $val;
-					else
-SyncDebug::log(__METHOD__.'():' . __LINE__ . ' Property "' . $prop_name . '" does not exist in object');
+//					else
+//SyncDebug::log(__METHOD__.'():' . __LINE__ . ' Property "' . $prop_name . '" does not exist in object');
 				} else {
 					if (isset($obj->{$this->_prop_list[$idx]}))
 						$obj->{$this->_prop_list[$idx]} = $val;
-					else
-SyncDebug::log(__METHOD__.'():' . __LINE__ . ' Property "' . $prop_name . '" does not exist in object');
+//					else
+//SyncDebug::log(__METHOD__.'():' . __LINE__ . ' Property "' . $prop_name . '" does not exist in object');
 				}
 			} else {															// single reference
-$prop_name .= $this->_prop_name;
-SyncDebug::log(__METHOD__.'():' . __LINE__ . ' setting property: ' . $prop_name);
+				$prop_name .= $this->_prop_name;
+//SyncDebug::log(__METHOD__.'():' . __LINE__ . ' setting property: ' . $prop_name);
 				if (isset($obj->{$this->_prop_name}))
 					$obj->{$this->_prop_name} = $val;
-				else
-SyncDebug::log(__METHOD__.'():' . __LINE__ . ' Property "' . $prop_name . '" does not exist in object');
+//				else
+//SyncDebug::log(__METHOD__.'():' . __LINE__ . ' Property "' . $prop_name . '" does not exist in object');
 			}
 		}
 
@@ -414,14 +418,15 @@ SyncDebug::log(__METHOD__.'():' . __LINE__ . ' Property "' . $prop_name . '" doe
 			case self::PROPTYPE_IMAGE:
 				$source_ref_id = abs($source_ref_id);		// these are always an integer
 				$sync_data = $this->_sync_model->get_sync_data($source_ref_id, $this->_api_controller->source_site_key);
-				if (NULL === $sync_data)
-					return FALSE;			// no data found, indicate this to caller
-				return abs($sync_data->target_content_id);
+				if (NULL !== $sync_data)
+					return abs($sync_data->target_content_id);
 				break;
+
 			case self::PROPTYPE_LINK:
 				return FALSE;
 				// note: this will return the string with the post ID modified
 				break;
+
 			case self::PROPTYPE_USER:
 				return FALSE;
 				// note: this will return the user id
@@ -440,7 +445,7 @@ SyncDebug::log(__METHOD__.'():' . __LINE__ . ' Property "' . $prop_name . '" doe
 		 */
 		public function parse_gutenberg_block($block_name, $json, $source_post_id, $data, $pos, $apirequest)
 		{
-SyncDebug::log(__METHOD__.'():' . __LINE__ . ' block name=' . $block_name);
+//SyncDebug::log(__METHOD__.'():' . __LINE__ . ' block name=' . $block_name);
 			if (in_array($block_name, $this->_block_names)) {
 				// check block name for types that cannot be synchronized and provide a notice
 				switch ($block_name) {
@@ -459,25 +464,25 @@ SyncDebug::log(__METHOD__.'():' . __LINE__ . ' block name=' . $block_name);
 
 				// the block name is found within our list of known block types to update
 				$obj = json_decode($json);
-if ('wp:uagb/info-box' === $block_name) SyncDebug::log(__METHOD__.'():' . __LINE__ . ' found json block data for "' . $block_name . '" : ' . var_export($obj, TRUE));
+//if ('wp:uagb/info-box' === $block_name) SyncDebug::log(__METHOD__.'():' . __LINE__ . ' found json block data for "' . $block_name . '" : ' . var_export($obj, TRUE));
 
 				if (!empty($json) && NULL !== $obj) {
 					// this block has a JSON object embedded within it
 					$props = explode('|', $this->_props[$block_name]);
-SyncDebug::log(__METHOD__.'():' . __LINE__ . ' props=' . var_export($props, TRUE));
+//SyncDebug::log(__METHOD__.'():' . __LINE__ . ' props=' . var_export($props, TRUE));
 					foreach ($props as $property) {
 						// for each property listed in the $_props array, look to see if it refers to an image ID
 						$ref_ids = array();
 						$this->_parse_property($property);
-						$prop_name = $this->_prop_name;
+//						$prop_name = $this->_prop_name;
 
 						if ($this->_prop_array) {								// property denotes an array reference
 							if (isset($obj->{$this->_prop_list[0]})) {			// make sure property exists
-SyncDebug::log(__METHOD__.'():' . __LINE__ . ' checking array: "' . $this->_prop_list[0] . '"');
+//SyncDebug::log(__METHOD__.'():' . __LINE__ . ' checking array: "' . $this->_prop_list[0] . '"');
 								$idx = 0;
 								foreach ($obj->{$this->_prop_list[0]} as $entry) {
 									$ref_id = abs($this->_get_val($entry, $idx));
-SyncDebug::log(__METHOD__.'():' . __LINE__ . ' source ref=' . var_export($ref_id, TRUE));
+//SyncDebug::log(__METHOD__.'():' . __LINE__ . ' source ref=' . var_export($ref_id, TRUE));
 									if (0 !== $ref_id)
 										$ref_ids[] = $ref_id;
 									++$idx;
@@ -485,11 +490,11 @@ SyncDebug::log(__METHOD__.'():' . __LINE__ . ' source ref=' . var_export($ref_id
 							}
 						} else {												// not an array reference, look up single property
 							$ref_id = abs($this->_get_val($obj));
-SyncDebug::log(__METHOD__.'():' . __LINE__ . ' source ref=' . var_export($ref_id, TRUE));
+//SyncDebug::log(__METHOD__.'():' . __LINE__ . ' source ref=' . var_export($ref_id, TRUE));
 							if (0 !== $ref_id)
 								$ref_ids[] = $ref_id;
 						}
-SyncDebug::log(__METHOD__.'():' . __LINE__ . ' found property "' . $prop_name . '" referencing ids ' . implode(',', $ref_ids));
+//SyncDebug::log(__METHOD__.'():' . __LINE__ . ' found property "' . $prop_name . '" referencing ids ' . implode(',', $ref_ids));
 
 						switch ($this->_prop_type) {
 						case self::PROPTYPE_IMAGE:
@@ -518,10 +523,10 @@ SyncDebug::log(__METHOD__.'():' . __LINE__ . ' found property "' . $prop_name . 
 					} // foreach
 				} // !empty($json)
 			} // in_array($block_name, $this->_props)
-else {
-SyncDebug::log(__METHOD__.'():' . __LINE__ . ' block name not recognized...continuing');
-}
-SyncDebug::log(__METHOD__.'():' . __LINE__ . ' exiting parse_gutenberg_block()');
+//else {
+//SyncDebug::log(__METHOD__.'():' . __LINE__ . ' block name not recognized...continuing');
+//}
+//SyncDebug::log(__METHOD__.'():' . __LINE__ . ' exiting parse_gutenberg_block()');
 		}
 
 		/**
@@ -537,7 +542,7 @@ SyncDebug::log(__METHOD__.'():' . __LINE__ . ' exiting parse_gutenberg_block()')
 		 */
 		public function process_gutenberg_block($content, $block_name, $json, $target_post_id, $start, $end, $pos)
 		{
-SyncDebug::log(__METHOD__.'():' . __LINE__);
+//SyncDebug::log(__METHOD__.'():' . __LINE__);
 			// look for known block names
 			if (in_array($block_name, $this->_block_names)) {
 				// check to see if it's one of the form block names; skip those
@@ -558,24 +563,24 @@ SyncDebug::log(__METHOD__.'():' . __LINE__);
 					}
 
 					$props = explode('|', $this->_props[$block_name]);
-SyncDebug::log(__METHOD__.'():' . __LINE__ . ' props=' . var_export($props, TRUE));
+//SyncDebug::log(__METHOD__.'():' . __LINE__ . ' props=' . var_export($props, TRUE));
 					foreach ($props as $property) {
 						// check for each property name found within the block's data
 						$this->_parse_property($property);
-						$prop_name = $this->_prop_name;
+//						$prop_name = $this->_prop_name;
 
 						if ($this->_prop_array) {								// property denotes an array reference
 							if (isset($obj->{$this->_prop_list[0]})) {			// make sure property exists
-SyncDebug::log(__METHOD__.'():' . __LINE__ . ' checking array: "' . $this->_prop_list[0] . '"');
+//SyncDebug::log(__METHOD__.'():' . __LINE__ . ' checking array: "' . $this->_prop_list[0] . '"');
 								$idx = 0;
 								foreach ($obj->{$this->_prop_list[0]} as &$entry) {
 									$source_ref_id = $this->_get_val($entry, $idx);
-SyncDebug::log(__METHOD__.'():' . __LINE__ . ' source ref=' . var_export($source_ref_id, TRUE));
+//SyncDebug::log(__METHOD__.'():' . __LINE__ . ' source ref=' . var_export($source_ref_id, TRUE));
 									if (0 !== $source_ref_id) {
 										// get the Target's post ID from the Source's post ID
 										$target_ref_id = $this->_get_target_ref($source_ref_id);
 										if (FALSE !== $target_ref_id) {
-SyncDebug::log(__METHOD__.'():' . __LINE__ . ' updating Source ID ' . $source_ref_id . ' to Target ID ' . $target_ref_id);
+//SyncDebug::log(__METHOD__.'():' . __LINE__ . ' updating Source ID ' . $source_ref_id . ' to Target ID ' . $target_ref_id);
 											$this->_set_val($entry, $target_ref_id, $idx);
 											$updated = TRUE;
 										}
@@ -585,12 +590,12 @@ SyncDebug::log(__METHOD__.'():' . __LINE__ . ' updating Source ID ' . $source_re
 							} // isset
 						} else {												// single reference
 							$source_ref_id = $this->_get_val($obj);
-SyncDebug::log(__METHOD__.'():' . __LINE__ . ' source ref=' . var_export($source_ref_id, TRUE));
+//SyncDebug::log(__METHOD__.'():' . __LINE__ . ' source ref=' . var_export($source_ref_id, TRUE));
 							if (0 !== $source_ref_id) {
 								// get the Target's post ID from the Source's post ID
 								$target_ref_id = $this->_get_target_ref($source_ref_id);
 								if (FALSE !== $target_ref_id) {
-SyncDebug::log(__METHOD__.'():' . __LINE__ . ' updating Source ID ' . $source_ref_id . ' to Target ID ' . $target_ref_id);
+//SyncDebug::log(__METHOD__.'():' . __LINE__ . ' updating Source ID ' . $source_ref_id . ' to Target ID ' . $target_ref_id);
 									$this->_set_val($obj, $target_ref_id);
 									$updated = TRUE;
 								}
@@ -602,26 +607,32 @@ SyncDebug::log(__METHOD__.'():' . __LINE__ . ' updating Source ID ' . $source_re
 						// one or more properties were updated with their Target post ID values- update the content
 						$new_obj_data = json_encode($obj, JSON_UNESCAPED_SLASHES);
 						$content = substr($content, 0, $start) . $new_obj_data . substr($content, $end + 1);
-SyncDebug::log(__METHOD__.'():' . __LINE__ . ' original: ' . $json . PHP_EOL . ' updated: ' . $new_obj_data);
+//SyncDebug::log(__METHOD__.'():' . __LINE__ . ' original: ' . $json . PHP_EOL . ' updated: ' . $new_obj_data);
 					}
 				} // !empty($json)
 			} // in_array($block_name, $this->_props)
-SyncDebug::log(__METHOD__.'():' . __LINE__ . ' returning');
+//SyncDebug::log(__METHOD__.'():' . __LINE__ . ' returning');
 			return $content;
 		}
 
+		/**
+		 * Filters notice code message, returning custom messages for this plugin
+		 * @param string $msg The current message string
+		 * @param int $code The notification code to translate to a message
+		 * @return string The plugin specific notification message
+		 */
 		public function filter_notice_codes($msg, $code)
 		{
-SyncDebug::log(__METHOD__.'():' . __LINE__);
+//SyncDebug::log(__METHOD__.'():' . __LINE__);
 			$api = $this->load_class('gutenbergblocksapirequest', TRUE);
 			return $api->filter_notice_codes($msg, $code);
 		}
 
 		/**
-		 * Add the Auto Sync add-on to the list of known WPSiteSync extensions
+		 * Add the Gutenberg add-on to the list of known WPSiteSync extensions
 		 * @param array $extensions The list to add to
 		 * @param boolean $set
-		 * @return array The list of extensions, with the WPSiteSync Auto Sync add-on included
+		 * @return array The list of extensions, with the WPSiteSync Gutenberg add-on included
 		 */
 		public function filter_active_extensions($extensions, $set = FALSE)
 		{

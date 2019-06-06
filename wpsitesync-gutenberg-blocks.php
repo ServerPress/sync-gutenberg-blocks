@@ -22,6 +22,7 @@ if (!class_exists('WPSiteSync_Gutenberg_Blocks', FALSE)) {
 		const PLUGIN_VERSION = '1.0';
 		const PLUGIN_NAME = 'WPSiteSync for Gutenberg Blocks';
 		const PLUGIN_KEY = '8d2f305fbb56ac7d5e4c79924fd4a8ab';
+		const REQUIRED_VERSION = '1.5.2';
 
 		private static $_instance = NULL;
 
@@ -214,10 +215,16 @@ if (!class_exists('WPSiteSync_Gutenberg_Blocks', FALSE)) {
 			add_filter('spectrom_sync_active_extensions', array($this, 'filter_active_extensions'), 10, 2);
 
 			if (!WPSiteSyncContent::get_instance()->get_license()->check_license('sync_gutenbergblocks', self::PLUGIN_KEY, self::PLUGIN_NAME)) {
-SyncDebug::log(__METHOD__.'() no license');
+//SyncDebug::log(__METHOD__.'() no license');
 				return;
 			}
-SyncDebug::log(__METHOD__.'():' . __LINE__ . ' license accepted');
+//SyncDebug::log(__METHOD__.'():' . __LINE__ . ' license accepted');
+
+			// check for minimum WPSiteSync version
+			if (is_admin() && version_compare(WPSiteSyncContent::PLUGIN_VERSION, self::REQUIRED_VERSION) < 0 && current_user_can('activate_plugins')) {
+				add_action('admin_notices', array($this, 'notice_minimum_version'));
+				return;
+			}
 
 			add_filter('spectrom_sync_allowed_post_types', array($this, 'allow_custom_post_types'));
 			add_action('spectrom_sync_parse_gutenberg_block', array($this, 'parse_gutenberg_block'), 10, 6);
@@ -274,10 +281,35 @@ SyncDebug::log(__METHOD__.'():' . __LINE__ . ' license accepted');
 		{
 			$install = admin_url('plugin-install.php?tab=search&s=wpsitesync');
 			$activate = admin_url('plugins.php');
-			echo '<div class="notice notice-warning">';
-			echo	'<p>', sprintf(__('The <em>WPSiteSync for Gutenberg Blocks</em> plugin requires the main <em>WPSiteSync for Content</em> plugin to be installed and activated. Please %1$sclick here</a> to install or %2$sclick here</a> to activate.', 'wpsitesync-gutenberg-blocks'),
+			$msg = sprintf(__('The <em>WPSiteSync for Gutenberg Blocks</em> plugin requires the main <em>WPSiteSync for Content</em> plugin to be installed and activated. Please %1$sclick here</a> to install or %2$sclick here</a> to activate.', 'wpsitesync-gutenberg-blocks'),
 						'<a href="' . $install . '">',
-						'<a href="' . $activate . '">'), '</p>';
+						'<a href="' . $activate . '">');
+			$this->_show_notice($msg, 'notice-warning');
+//			echo '<div class="notice notice-warning">';
+//			echo	'<p>', sprintf(__('The <em>WPSiteSync for Gutenberg Blocks</em> plugin requires the main <em>WPSiteSync for Content</em> plugin to be installed and activated. Please %1$sclick here</a> to install or %2$sclick here</a> to activate.', 'wpsitesync-gutenberg-blocks'),
+//						'<a href="' . $install . '">',
+//						'<a href="' . $activate . '">'), '</p>';
+//			echo '</div>';
+		}
+
+		/**
+		 * Display admin notice to upgrade WPSiteSync for Content plugin
+		 */
+		public function notice_minimum_version()
+		{
+			$this->_show_notice(sprintf(__('WPSiteSync for Gutenberg Blocks requires version %1$s or greater of <em>WPSiteSync for Content</em> to be installed. Please <a href="2%s">click here</a> to update.', 'wpsitesync-gutenberg-blocks'), self::REQUIRED_VERSION, admin_url('plugins.php')), 'notice-warning');
+		}
+
+		/**
+		 * Helper method to display notices
+		 * @param string $msg Message to display within notice
+		 * @param string $class The CSS class used on the <div> wrapping the notice
+		 * @param boolean $dismissable TRUE if message is to be dismissable; otherwise FALSE.
+		 */
+		private function _show_notice($msg, $class = 'notice-success', $dismissable = FALSE)
+		{
+			echo '<div class="notice ', $class, ' ', ($dismissable ? 'is-dismissible' : ''), '">';
+			echo '<p>', $msg, '</p>';
 			echo '</div>';
 		}
 

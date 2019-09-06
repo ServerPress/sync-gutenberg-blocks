@@ -178,11 +178,6 @@ if (!class_exists('WPSiteSync_Gutenberg_Blocks', FALSE)) {
 		const PROPTYPE_GF = 5;						// :gf gravity form
 		const PROPTYPE_CF = 6;						// :cf contact form 7 */
 
-//		private $_prop_type = 0;					// property type- one of the PROPTYPE_ constants
-//		private $_prop_name = NULL;					// name of the property to update
-//		private $_prop_array = FALSE;				// set to TRUE if property refers to an array
-//		private $_prop_list = NULL;					// list of property elements
-
 		private $_block_names = NULL;				// array of block names (keys) from $_props
 		private $_thumb_id = NULL;					// post ID of thumbnail for current post
 		private $_api_controller = NULL;			// copy of API Controller instance used on Target

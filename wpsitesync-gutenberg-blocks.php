@@ -38,7 +38,7 @@ if (!class_exists('WPSiteSync_Gutenberg_Blocks', FALSE)) {
 			'wp:atomic-blocks/ab-cta' =>				'imgID',
 		//	wp:atomic-blocks/ab-drop-cap - no ids in json
 		//	wp:atomic-blocks/ab-notice - no ids in json
-			'wp:atomic-blocks/ab-post-grid' =>			'categories:t',
+			'wp:atomic-blocks/ab-post-grid' =>			'categories:T',
 			'wp:atomic-blocks/ab-profile-box' =>		'profileImgID',
 		//	wp:atomic-blocks/ab-sharing - no ids in json
 		//	wp:atomic-blocks/ab-spacer - no ids in json
@@ -171,13 +171,6 @@ if (!class_exists('WPSiteSync_Gutenberg_Blocks', FALSE)) {
 		//	wp:themeisle-blocks/tweetable
 		);
 
-/*		const PROPTYPE_IMAGE = 1;					// :i (default)
-		const PROPTYPE_POST = 2;					// :p
-		const PROPTYPE_USER = 3;					// :u
-		const PROPTYPE_LINK = 4;					// :l
-		const PROPTYPE_GF = 5;						// :gf gravity form
-		const PROPTYPE_CF = 6;						// :cf contact form 7 */
-
 		private $_block_names = NULL;				// array of block names (keys) from $_props
 		private $_thumb_id = NULL;					// post ID of thumbnail for current post
 		private $_api_controller = NULL;			// copy of API Controller instance used on Target
@@ -189,6 +182,9 @@ if (!class_exists('WPSiteSync_Gutenberg_Blocks', FALSE)) {
 			add_action('wp_loaded', array($this, 'wp_loaded'));
 		}
 
+		/**
+		 * Return singleton instance of class
+		 */
 		public static function get_instance()
 		{
 			if (NULL === self::$_instance)
@@ -245,7 +241,7 @@ if (!class_exists('WPSiteSync_Gutenberg_Blocks', FALSE)) {
 		/**
 		 * Adds all Gutenberg related custom post types to the list of `spectrom_sync_allowed_post_types`
 		 * @param array $post_types The post types to allow
-		 * @return array
+		 * @return array Modified array with 'wp_block' post type added
 		 */
 		public function allow_custom_post_types($post_types)
 		{
@@ -274,11 +270,6 @@ if (!class_exists('WPSiteSync_Gutenberg_Blocks', FALSE)) {
 						'<a href="' . $install . '">',
 						'<a href="' . $activate . '">');
 			$this->_show_notice($msg, 'notice-warning');
-//			echo '<div class="notice notice-warning">';
-//			echo	'<p>', sprintf(__('The <em>WPSiteSync for Gutenberg Blocks</em> plugin requires the main <em>WPSiteSync for Content</em> plugin to be installed and activated. Please %1$sclick here</a> to install or %2$sclick here</a> to activate.', 'wpsitesync-gutenberg-blocks'),
-//						'<a href="' . $install . '">',
-//						'<a href="' . $activate . '">'), '</p>';
-//			echo '</div>';
 		}
 
 		/**
@@ -395,6 +386,7 @@ SyncDebug::log(__METHOD__.'():' . __LINE__ . ' found property "' . $prop_name . 
 							break;
 
 						case SyncGutenbergEntry::PROPTYPE_TAX:
+						case SyncGutenbergEntry::PROPTYPE_TAXSTR:
 							// handle taxonomy references and ensure taxonomy data is added to API's post data array
 							foreach ($ref_ids as $ref_id) {
 								if (0 !== $ref_id) {
@@ -470,7 +462,8 @@ SyncDebug::log(__METHOD__.'():' . __LINE__ . ' updating Source ID ' . $source_re
 										$gb_entry->set_val($entry, $target_ref_id, $idx);
 										$updated = TRUE;
 									} else {
-										if (SyncGutenbergEntry::PROPTYPE_TAX === $gb_entry->prop_type) {
+										if (SyncGutenbergEntry::PROPTYPE_TAX === $gb_entry->prop_type ||
+											SyncGutenbergEntry::PROPTYPE_TAXSTR === $gb_entry->prop_type) {
 											$input = new SyncInput();
 											$tax_data = $input->post_raw('taxonomies', array());
 SyncDebug::log(__METHOD__.'():' . __LINE__ . ' tax id not found ' . var_export($tax_data['lineage'], TRUE));
@@ -486,13 +479,14 @@ SyncDebug::log(__METHOD__.'():' . __LINE__ . ' source ref=' . var_export($source
 							$target_ref_id = $gb_entry->get_target_ref($source_ref_id);			// $this->_get_target_ref($source_ref_id);
 							if (FALSE !== $target_ref_id) {
 SyncDebug::log(__METHOD__.'():' . __LINE__ . ' updating Source ID ' . $source_ref_id . ' to Target ID ' . $target_ref_id);
-								$gb_entry->set_val($obj, strval($target_ref_id));
+								$gb_entry->set_val($obj, $target_ref_id);
 								$updated = TRUE;
 							} else {
-								if (SyncGutenbergEntry::PROPTYPE_TAX === $gb_entry->prop_type) {
+								if (SyncGutenbergEntry::PROPTYPE_TAX === $gb_entry->prop_type ||
+									SyncGutenbergEntry::PROPTYPE_TAXSTR === $gb_entry->prop_type) {
 									$input = new SyncInput();
 									$tax_data = $input->post_raw('taxonomies', array());
-SyncDebug::log(__METHOD__.'():' . __LINE__ . ' tax id not found ' . var_export($tax_data['lineage'], TRUE));
+if (isset($tax_data['lineage'])) SyncDebug::log(__METHOD__.'():' . __LINE__ . ' tax id not found ' . var_export($tax_data['lineage'], TRUE));
 								}
 							}
 						}

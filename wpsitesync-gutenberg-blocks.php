@@ -486,7 +486,7 @@ SyncDebug::log(__METHOD__.'():' . __LINE__ . ' source ref=' . var_export($source
 							$target_ref_id = $gb_entry->get_target_ref($source_ref_id);			// $this->_get_target_ref($source_ref_id);
 							if (FALSE !== $target_ref_id) {
 SyncDebug::log(__METHOD__.'():' . __LINE__ . ' updating Source ID ' . $source_ref_id . ' to Target ID ' . $target_ref_id);
-								$gb_entry->set_val($obj, $target_ref_id);
+								$gb_entry->set_val($obj, strval($target_ref_id));
 								$updated = TRUE;
 							} else {
 								if (SyncGutenbergEntry::PROPTYPE_TAX === $gb_entry->prop_type) {

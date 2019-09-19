@@ -1,2 +1,3 @@
 * fix: Add handling for taxonomy ID references in Atomic Blocks Post Grid Block
 * enhancement: refactored the property array parsing and handling into core functionality so other add-ons can leverage shared code
+* enhancement: update .htaccess rules for Apache 2.2 and 2.4

@@ -144,7 +144,7 @@ if (!class_exists('WPSiteSync_Gutenberg_Blocks', FALSE)) {
 			'wp:ugb/testimonial' =>						'mediaID1|mediaID2|mediaID3|mediaID|mediaIDTwo|mediaIDThree', #49 // > 3 testimonials
 			'wp:ugb/video-popup' =>						'videoID|backgroundImageID|mediaID',	#50
 
-			// properties for: Otter Blocks v1.2.2
+			// properties for: Otter Blocks v1.2.5
 		//	wp:themeisle-blocks/about-author
 		//	wp:themeisle-blocks/accordion-area
 		//	wp:themeisle-blocks/accordion-block
@@ -157,7 +157,7 @@ if (!class_exists('WPSiteSync_Gutenberg_Blocks', FALSE)) {
 		//	wp:themeisle-blocks/notice
 		//	wp:themeisle-blocks/plugin-cards
 		//	wp:themeisle-blocks/google-map
-		//	wp:themeisle-blocks/posts-grid
+			'wp:themeisle-blocks/posts-grid' =>			'categories:T', #58
 		//	wp:themeisle-blocks/pricing
 		//	wp:themeisle-blocks/pricing-block
 			'wp:themeisle-blocks/pricing-table' =>		'backgroundImageID', #51
@@ -203,7 +203,6 @@ if (!class_exists('WPSiteSync_Gutenberg_Blocks', FALSE)) {
 //SyncDebug::log(__METHOD__.'() no license');
 				return;
 			}
-//SyncDebug::log(__METHOD__.'():' . __LINE__ . ' license accepted');
 
 			// check for minimum WPSiteSync version
 			if (is_admin() && version_compare(WPSiteSyncContent::PLUGIN_VERSION, self::REQUIRED_VERSION) < 0 && current_user_can('activate_plugins')) {

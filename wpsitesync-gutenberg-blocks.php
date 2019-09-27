@@ -72,7 +72,7 @@ if (!class_exists('WPSiteSync_Gutenberg_Blocks', FALSE)) {
 		//	wp:uagb/google-map - no ids in json
 			'wp:uagb/info-box' =>						'iconImage.id|iconImage.uploadedTo:p|iconImage.author:u|iconImage.editLink:l|iconImage.uploadedToLink:l', #23
 		//	wp:uagb/post-carousel - no ids in json
-		//	wp:uagb/post-grid - no ids in json
+			'wp:uagb/post-grid' =>						'categories:T', #58
 		//	wp:uagb/post-masonry - no ids in json
 		//	wp:uagb/post-timeline - no ids in json
 			'wp:uagb/restaurant-menu' =>				'[rest_menu_item_arr.image.id|[rest_menu_item_arr.image.author:u|[rest_menu_item_arr.image.uploadedTo:p|[rest_menu_item_arr.image.editLink:l|[rest_menu_item_arr.image.uploadedToLink:l', #24

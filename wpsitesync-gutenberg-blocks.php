@@ -58,7 +58,7 @@ if (!class_exists('WPSiteSync_Gutenberg_Blocks', FALSE)) {
 			'wp:premium/testimonial' =>					'imageID|authorImgId',
 			'wp:premium/video-box' =>					'overlayImgID',	#12
 
-			// properties for: Ultimate Addons for Gutenberg v1.13.1
+			// properties for: Ultimate Addons for Gutenberg v1.13.6
 		//	wp:uagb/advanced-heading - no ids in json
 			'wp:uagb/blockquote' =>						'authorImage.id|author.author:u', #18
 		//	wp:uagb/buttons Multi Buttons - no ids in json
@@ -71,10 +71,10 @@ if (!class_exists('WPSiteSync_Gutenberg_Blocks', FALSE)) {
 			'wp:uagb/gf-styler' =>						'', #22
 		//	wp:uagb/google-map - no ids in json
 			'wp:uagb/info-box' =>						'iconImage.id|iconImage.uploadedTo:p|iconImage.author:u|iconImage.editLink:l|iconImage.uploadedToLink:l', #23
-		//	wp:uagb/post-carousel - no ids in json
+			'wp:uagb/post-carousel' =>					'categories:T', #58
 			'wp:uagb/post-grid' =>						'categories:T', #58
-		//	wp:uagb/post-masonry - no ids in json
-		//	wp:uagb/post-timeline - no ids in json
+			'wp:uagb/post-masonry' =>					'categories:T', #58
+			'wp:uagb/post-timeline' =>					'categories:T', #58
 			'wp:uagb/restaurant-menu' =>				'[rest_menu_item_arr.image.id|[rest_menu_item_arr.image.author:u|[rest_menu_item_arr.image.uploadedTo:p|[rest_menu_item_arr.image.editLink:l|[rest_menu_item_arr.image.uploadedToLink:l', #24
 			'wp:uagb/section' =>						'backgroundImage.id|backgroundImage.author:u|backgroundImage.editLink:l|backgroundImage.uploadedToLink:l', #25
 			'wp:uagb/social-share' =>					'[socials.image.id|[socials.image.author:u|[socials.image.editLink:l|[socials.image.uploadedToLink:l', #26
@@ -87,7 +87,7 @@ if (!class_exists('WPSiteSync_Gutenberg_Blocks', FALSE)) {
 		//	wp:kadence/advancedbtn - no ids in json
 			'wp:kadence/rowlayout' =>					'bgImgID|overlayBgImgID', #29
 		//	wp:kadence/column - no ids in json
-		//	wp:kadence/icon - no ids in json							
+		//	wp:kadence/icon - no ids in json
 		//	wp:kadence/advancedheading - no ids in json
 		//	wp:kadence/tabs - no ids in json
 		//	wp:kadence/tab - no ids in json
@@ -179,7 +179,8 @@ if (!class_exists('WPSiteSync_Gutenberg_Blocks', FALSE)) {
 		private function __construct()
 		{
 			add_action('spectrom_sync_init', array($this, 'init'));
-			add_action('wp_loaded', array($this, 'wp_loaded'));
+			if (is_admin())
+				add_action('wp_loaded', array($this, 'wp_loaded'));
 		}
 
 		/**
@@ -207,9 +208,11 @@ if (!class_exists('WPSiteSync_Gutenberg_Blocks', FALSE)) {
 			// check for minimum WPSiteSync version
 			if (is_admin() && version_compare(WPSiteSyncContent::PLUGIN_VERSION, self::REQUIRED_VERSION) < 0 && current_user_can('activate_plugins')) {
 				add_action('admin_notices', array($this, 'notice_minimum_version'));
+				add_action('admin_init', array($this, 'disable_plugin'));
 				return;
 			}
 
+			// TODO: move into 'spectrom_sync_api_init' callback
 			add_filter('spectrom_sync_allowed_post_types', array($this, 'allow_custom_post_types'));
 			add_action('spectrom_sync_parse_gutenberg_block', array($this, 'parse_gutenberg_block'), 10, 6);
 			add_filter('spectrom_sync_process_gutenberg_block', array($this, 'process_gutenberg_block'), 10, 7);
@@ -255,6 +258,7 @@ if (!class_exists('WPSiteSync_Gutenberg_Blocks', FALSE)) {
 		{
 			if (is_admin() && !class_exists('WPSiteSyncContent', FALSE) && current_user_can('activate_plugins')) {
 				add_action('admin_notices', array($this, 'notice_requires_wpss'));
+				add_action('admin_init', array($this, 'disable_plugin'));
 			}
 		}
 
@@ -276,7 +280,7 @@ if (!class_exists('WPSiteSync_Gutenberg_Blocks', FALSE)) {
 		 */
 		public function notice_minimum_version()
 		{
-			$this->_show_notice(sprintf(__('WPSiteSync for Gutenberg Blocks requires version %1$s or greater of <em>WPSiteSync for Content</em> to be installed. Please <a href="2%s">click here</a> to update.', 'wpsitesync-gutenberg-blocks'), self::REQUIRED_VERSION, admin_url('plugins.php')), 'notice-warning');
+			$this->_show_notice(sprintf(__('The <em>WPSiteSync for Gutenberg Blocks</em> plugin requires version %1$s or greater of <em>WPSiteSync for Content</em> to be installed. Please <a href="2%s">click here</a> to update.', 'wpsitesync-gutenberg-blocks'), self::REQUIRED_VERSION, admin_url('plugins.php')), 'notice-warning');
 		}
 
 		/**
@@ -290,6 +294,14 @@ if (!class_exists('WPSiteSync_Gutenberg_Blocks', FALSE)) {
 			echo '<div class="notice ', $class, ' ', ($dismissable ? 'is-dismissible' : ''), '">';
 			echo '<p>', $msg, '</p>';
 			echo '</div>';
+		}
+
+		/**
+		 * Disables the plugin if WPSiteSync not installed or ACF is too old
+		 */
+		public function disable_plugin()
+		{
+			deactivate_plugins(plugin_basename(__FILE__));
 		}
 
 		/**
@@ -438,63 +450,65 @@ SyncDebug::log(__METHOD__.'():' . __LINE__);
 						$this->_sync_model = new SyncModel();
 					}
 
-					$props = explode('|', $this->_props[$block_name]);
+					if (isset($this->_props[$block_name])) {
+						$props = explode('|', $this->_props[$block_name]);
 //SyncDebug::log(__METHOD__.'():' . __LINE__ . ' props=' . var_export($props, TRUE));
-					foreach ($props as $property) {
-						// check for each property name found within the block's data
-						$gb_entry = new SyncGutenbergEntry($property);		// $this->_parse_property($property);
-//						$prop_name = $gb_entry->prop_name;
+						foreach ($props as $property) {
+							// check for each property name found within the block's data
+							$gb_entry = new SyncGutenbergEntry($property);		// $this->_parse_property($property);
+//							$prop_name = $gb_entry->prop_name;
 
-						if ($gb_entry->prop_array) {								// property denotes an array reference
-							if (isset($obj->{$gb_entry->prop_list[0]})) {			// make sure property exists
+							if ($gb_entry->prop_array) {								// property denotes an array reference
+								if (isset($obj->{$gb_entry->prop_list[0]})) {			// make sure property exists
 //SyncDebug::log(__METHOD__.'():' . __LINE__ . ' checking array: "' . $gb_entry->prop_list[0] . '"');
-								$idx = 0;
-								foreach ($obj->{$gb_entry->prop_list[0]} as &$entry) {
-									$source_ref_id = $gb_entry->get_val($entry, $idx);
+									$idx = 0;
+									foreach ($obj->{$gb_entry->prop_list[0]} as &$entry) {
+										$source_ref_id = $gb_entry->get_val($entry, $idx);
 //SyncDebug::log(__METHOD__.'():' . __LINE__ . ' source ref=' . var_export($source_ref_id, TRUE));
-									// get the Target's post ID from the Source's post ID
-									$target_ref_id = $gb_entry->get_target_ref($source_ref_id);	// $this->_get_target_ref($source_ref_id);
-									if (FALSE !== $target_ref_id) {
+										// get the Target's post ID from the Source's post ID
+										$target_ref_id = $gb_entry->get_target_ref($source_ref_id);	// $this->_get_target_ref($source_ref_id);
+										if (FALSE !== $target_ref_id) {
 //SyncDebug::log(__METHOD__.'():' . __LINE__ . ' updating Source ID ' . $source_ref_id . ' to Target ID ' . $target_ref_id);
-										$gb_entry->set_val($entry, $target_ref_id, $idx);
-										$updated = TRUE;
-									} else {
-										if (SyncGutenbergEntry::PROPTYPE_TAX === $gb_entry->prop_type ||
-											SyncGutenbergEntry::PROPTYPE_TAXSTR === $gb_entry->prop_type) {
-											$input = new SyncInput();
-											$tax_data = $input->post_raw('taxonomies', array());
+											$gb_entry->set_val($entry, $target_ref_id, $idx);
+											$updated = TRUE;
+										} else {
+											if (SyncGutenbergEntry::PROPTYPE_TAX === $gb_entry->prop_type ||
+												SyncGutenbergEntry::PROPTYPE_TAXSTR === $gb_entry->prop_type) {
+												$input = new SyncInput();
+												$tax_data = $input->post_raw('taxonomies', array());
 //SyncDebug::log(__METHOD__.'():' . __LINE__ . ' tax id not found ' . var_export($tax_data['lineage'], TRUE));
+											}
 										}
+										++$idx;
 									}
-									++$idx;
-								}
-							} // isset
-						} else {												// single reference
-							$source_ref_id = $gb_entry->get_val($obj);
+								} // isset
+							} else {												// single reference
+								$source_ref_id = $gb_entry->get_val($obj);
 //SyncDebug::log(__METHOD__.'():' . __LINE__ . ' source ref=' . var_export($source_ref_id, TRUE));
-							// get the Target's post ID from the Source's post ID
-							$target_ref_id = $gb_entry->get_target_ref($source_ref_id);			// $this->_get_target_ref($source_ref_id);
-							if (FALSE !== $target_ref_id) {
+								// get the Target's post ID from the Source's post ID
+								$target_ref_id = $gb_entry->get_target_ref($source_ref_id);			// $this->_get_target_ref($source_ref_id);
+								if (FALSE !== $target_ref_id) {
 //SyncDebug::log(__METHOD__.'():' . __LINE__ . ' updating Source ID ' . $source_ref_id . ' to Target ID ' . $target_ref_id);
-								$gb_entry->set_val($obj, $target_ref_id);
-								$updated = TRUE;
-							} else {
-								if (SyncGutenbergEntry::PROPTYPE_TAX === $gb_entry->prop_type ||
-									SyncGutenbergEntry::PROPTYPE_TAXSTR === $gb_entry->prop_type) {
-									$input = new SyncInput();
-									$tax_data = $input->post_raw('taxonomies', array());
+									$gb_entry->set_val($obj, $target_ref_id);
+									$updated = TRUE;
+								} else {
+									if (SyncGutenbergEntry::PROPTYPE_TAX === $gb_entry->prop_type ||
+										SyncGutenbergEntry::PROPTYPE_TAXSTR === $gb_entry->prop_type) {
+										$input = new SyncInput();
+										$tax_data = $input->post_raw('taxonomies', array());
 //if (isset($tax_data['lineage'])) SyncDebug::log(__METHOD__.'():' . __LINE__ . ' tax id not found ' . var_export($tax_data['lineage'], TRUE));
+									}
 								}
 							}
-						}
-					} // foreach
+						} // foreach
 
-					if ($updated) {
-						// one or more properties were updated with their Target post ID values- update the content
-						$new_obj_data = json_encode($obj, JSON_UNESCAPED_SLASHES);
-						$content = substr($content, 0, $start) . $new_obj_data . substr($content, $end + 1);
+						if ($updated) {
+							// one or more properties were updated with their Target post ID values- update the content
+							$new_obj_data = json_encode($obj, JSON_UNESCAPED_SLASHES);
+							$content = substr($content, 0, $start) . $new_obj_data . substr($content, $end + 1);
 //SyncDebug::log(__METHOD__.'():' . __LINE__ . ' original: ' . $json . PHP_EOL . ' updated: ' . $new_obj_data);
-					}
+						}
+					} // isset($this->_props[$block_name])
 				} // !empty($json)
 			} // in_array($block_name, $this->_props)
 //SyncDebug::log(__METHOD__.'():' . __LINE__ . ' returning');

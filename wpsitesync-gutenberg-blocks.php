@@ -5,7 +5,7 @@ Plugin URI: https://wpsitesync.com
 Description: Adds handlers for third-party Gutenberg Blocks to WPSiteSync so all your favorite blocks can be synchronized.
 Author: WPSiteSync
 Author URI: http://wpsitesync.com
-Version: 1.1
+Version: 1.2
 Text Domain: wpsitesync-gutenberg-blocks
 Domain path: /language
 
@@ -19,10 +19,10 @@ defined('ABSPATH') or (header('Forbidden', TRUE, 403) || die('Restricted'));
 if (!class_exists('WPSiteSync_Gutenberg_Blocks', FALSE)) {
 	class WPSiteSync_Gutenberg_Blocks
 	{
-		const PLUGIN_VERSION = '1.1';
+		const PLUGIN_VERSION = '1.2';
 		const PLUGIN_NAME = 'WPSiteSync for Gutenberg Blocks';
 		const PLUGIN_KEY = '8d2f305fbb56ac7d5e4c79924fd4a8ab';
-		const REQUIRED_VERSION = '1.5.3';
+		const REQUIRED_VERSION = '1.6';
 
 		private static $_instance = NULL;
 

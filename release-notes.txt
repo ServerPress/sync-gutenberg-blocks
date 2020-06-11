@@ -1,1 +1,2 @@
 * fix: add support for Otter Blocks and Ultimate Add-ons Post Grid Blocks
+* enhancement: Check for presence of WPSiteSync plugin and disable if plugin not found or not minimum required version.
